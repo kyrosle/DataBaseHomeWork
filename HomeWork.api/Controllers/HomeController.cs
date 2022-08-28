@@ -1,16 +1,29 @@
-﻿using HomeWork.api.Models;
+﻿using HomeWork.api.Context;
+using System.Linq;
+using HomeWork.api.Models;
+using HomeWork.api.Service;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using HomeWork.api.Tools;
 
 namespace HomeWork.api.Controllers
 {
     [ApiController]
-    [Route("[Controller]/[action]")]
+    [Route("api/[Controller]/[action]")]
     public class HomeController : ControllerBase
     {
-        [HttpGet]
-        public Person Index()
+        private readonly MyDbContext db;
+
+        public HomeController(MyDbContext db)
         {
-            return new Person { Id = 0, Name = "Man" };
+            this.db = db;
+        }
+        [HttpGet]
+        public async Task<ApiResponse> Test()
+        {
+            var staff = await db.Staffs.FirstOrDefaultAsync();
+            return new ApiResponse(true, staff);
         }
     }
 }

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace HomeWork.api.ModelsConfigs
 {
-    public class SalaryLevelConfig : IEntityTypeConfiguration<SalaryLevel>
+    public class StaffSalaryConfig : IEntityTypeConfiguration<StaffSalary>
     {
-        public void Configure(EntityTypeBuilder<SalaryLevel> builder)
+        public void Configure(EntityTypeBuilder<StaffSalary> builder)
         {
-            builder.ToTable("T_SalaryLevel");
+            builder.ToTable("T_StaffSalary");
         }
     }
 }

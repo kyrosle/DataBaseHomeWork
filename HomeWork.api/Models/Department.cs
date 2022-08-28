@@ -2,6 +2,6 @@
 {
     public class Department : IdentityModel
     {
-        public int Manager { get; set; }
+        public int ManagerId { get; set; }
     }
 }

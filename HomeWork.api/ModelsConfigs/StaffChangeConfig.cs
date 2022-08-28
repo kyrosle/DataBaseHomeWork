@@ -9,7 +9,6 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<StaffChange> builder)
         {
             builder.ToTable("T_StaffChange");
-            builder.HasKey(e => e.StaffId);
         }
     }
 }

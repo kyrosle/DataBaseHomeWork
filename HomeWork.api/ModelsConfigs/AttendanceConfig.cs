@@ -9,7 +9,7 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Attendance> builder)
         {
             builder.ToTable("T_Attendance");
-            builder.HasKey(e => e.StaffId);
+            builder.Property(e => e.StaffId).HasColumnName("staff_id");
         }
     }
 }

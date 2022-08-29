@@ -2,7 +2,7 @@
 {
     public class StaffSalary
     {
-        public int StaffId { get; set; }
+        public int SalaryId { get; set; }
         public float Salary { get; set; }
     }
 }

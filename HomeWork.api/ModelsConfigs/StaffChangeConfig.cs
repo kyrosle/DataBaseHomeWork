@@ -8,7 +8,10 @@ namespace HomeWork.api.ModelsConfigs
     {
         public void Configure(EntityTypeBuilder<StaffChange> builder)
         {
-            builder.ToTable("T_StaffChange");
+            builder.ToTable("T_StaffChange").HasNoKey();
+            builder.Property(e => e.StaffId).HasColumnName("staff_id");
+            builder.Property(e => e.DepartmentId).HasColumnName("department_id");
+            builder.Property(e => e.ChangeTime).HasColumnName("change_time");
         }
     }
 }

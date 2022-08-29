@@ -9,6 +9,9 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Post> builder)
         {
             builder.ToTable("T_Post");
+            builder.Property(e => e.Id).HasColumnName("post_id");
+            builder.Property(e => e.Name).HasColumnName("post_name");
+            builder.Property(e => e.SalaryId).HasColumnName("post_salary_id");
         }
     }
 }

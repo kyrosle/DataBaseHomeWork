@@ -9,6 +9,9 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.ToTable("T_Department");
+            builder.Property(e => e.Id).HasColumnName("department_id");
+            builder.Property(e => e.Name).HasColumnName("department_name");
+            builder.Property(e => e.ManagerId).HasColumnName("department_manager_id");
         }
     }
 }

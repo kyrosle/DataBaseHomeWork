@@ -9,6 +9,8 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Political> builder)
         {
             builder.ToTable("T_Political");
+            builder.Property(e => e.Id).HasColumnName("political_id");
+            builder.Property(e => e.EnumType).HasColumnName("political_type");
         }
     }
 }

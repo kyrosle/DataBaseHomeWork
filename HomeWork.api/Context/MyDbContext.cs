@@ -8,11 +8,9 @@ namespace HomeWork.api.Context
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<AttendanceStatus> AttendanceStatuses { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public DbSet<Level> Levels { get; set; }
         public DbSet<Political> Politicals { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<StaffSalary> Salarys { get; set; }
-        public DbSet<SalaryLevel> SalaryLevels { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<StaffChange> StaffChanges { get; set; }
         public MyDbContext(DbContextOptions options) : base(options)

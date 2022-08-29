@@ -9,6 +9,9 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<StaffSalary> builder)
         {
             builder.ToTable("T_StaffSalary");
+            builder.HasKey(e => e.SalaryId);
+            builder.Property(e => e.SalaryId).HasColumnName("salary_id");
+            builder.Property(e => e.Salary).HasColumnName("salary_value");
         }
     }
 }

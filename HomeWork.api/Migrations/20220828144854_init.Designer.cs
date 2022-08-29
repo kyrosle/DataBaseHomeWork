@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeWork.api.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20220828121046_setid")]
-    partial class setid
+    [Migration("20220828144854_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,16 +27,16 @@ namespace HomeWork.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("AttendTime")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("AttendanceType")
                         .HasColumnType("int");
+
+                    b.Property<float>("CountTime")
+                        .HasColumnType("float");
 
                     b.Property<DateTime>("RecordTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int>("SalaryId")
                         .HasColumnType("int")
                         .HasColumnName("staff_id");
 
@@ -54,6 +54,12 @@ namespace HomeWork.api.Migrations
                     b.Property<string>("EnumType")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<float>("FineOrBouns")
+                        .HasColumnType("float");
+
+                    b.Property<float>("RateFineOrBouns")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -78,21 +84,6 @@ namespace HomeWork.api.Migrations
                     b.ToTable("T_Department", (string)null);
                 });
 
-            modelBuilder.Entity("HomeWork.api.Models.Level", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("EnumType")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("T_Level", (string)null);
-                });
-
             modelBuilder.Entity("HomeWork.api.Models.Political", b =>
                 {
                     b.Property<int>("Id")
@@ -114,14 +105,11 @@ namespace HomeWork.api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("LevelKey")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("SalaryLevelKey")
+                    b.Property<int>("SalaryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -129,45 +117,10 @@ namespace HomeWork.api.Migrations
                     b.ToTable("T_Post", (string)null);
                 });
 
-            modelBuilder.Entity("HomeWork.api.Models.Salary", b =>
-                {
-                    b.Property<int>("StaffId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("AnnualSalary")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MonthlySalary")
-                        .HasColumnType("int");
-
-                    b.HasKey("StaffId");
-
-                    b.ToTable("T_Salary", (string)null);
-                });
-
-            modelBuilder.Entity("HomeWork.api.Models.SalaryLevel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("EnumType")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("T_SalaryLevel", (string)null);
-                });
-
             modelBuilder.Entity("HomeWork.api.Models.Staff", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("Age")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Brith")
@@ -206,12 +159,26 @@ namespace HomeWork.api.Migrations
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StaffId")
+                    b.Property<int>("SalaryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.ToTable("T_StaffChange", (string)null);
+                });
+
+            modelBuilder.Entity("HomeWork.api.Models.StaffSalary", b =>
+                {
+                    b.Property<int>("SalaryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<float>("Salary")
+                        .HasColumnType("float");
+
+                    b.HasKey("SalaryId");
+
+                    b.ToTable("T_StaffSalary", (string)null);
                 });
 #pragma warning restore 612, 618
         }

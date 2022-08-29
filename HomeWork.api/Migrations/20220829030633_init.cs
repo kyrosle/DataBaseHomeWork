@@ -17,16 +17,13 @@ namespace HomeWork.api.Migrations
                 name: "T_Attendance",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     staff_id = table.Column<int>(type: "int", nullable: false),
-                    AttendanceType = table.Column<int>(type: "int", nullable: false),
-                    RecordTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CountTime = table.Column<float>(type: "float", nullable: false)
+                    attendance_type = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    record_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    count_time = table.Column<float>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_Attendance", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -34,16 +31,16 @@ namespace HomeWork.api.Migrations
                 name: "T_AttendanceStatus",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    attandance_status_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    FineOrBouns = table.Column<float>(type: "float", nullable: false),
-                    RateFineOrBouns = table.Column<float>(type: "float", nullable: false),
-                    EnumType = table.Column<string>(type: "longtext", nullable: false)
+                    attendance_fine_or_bouns = table.Column<float>(type: "float", nullable: false),
+                    attendance_rate_fine_or_bouns = table.Column<float>(type: "float", nullable: false),
+                    attandance_status_type = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_AttendanceStatus", x => x.Id);
+                    table.PrimaryKey("PK_T_AttendanceStatus", x => x.attandance_status_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -51,15 +48,15 @@ namespace HomeWork.api.Migrations
                 name: "T_Department",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    department_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ManagerId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    department_manager_id = table.Column<int>(type: "int", nullable: false),
+                    department_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_Department", x => x.Id);
+                    table.PrimaryKey("PK_T_Department", x => x.department_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -67,14 +64,14 @@ namespace HomeWork.api.Migrations
                 name: "T_Political",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    political_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    EnumType = table.Column<string>(type: "longtext", nullable: false)
+                    political_type = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_Political", x => x.Id);
+                    table.PrimaryKey("PK_T_Political", x => x.political_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -82,15 +79,15 @@ namespace HomeWork.api.Migrations
                 name: "T_Post",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    post_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    SalaryId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    post_salary_id = table.Column<int>(type: "int", nullable: false),
+                    post_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_Post", x => x.Id);
+                    table.PrimaryKey("PK_T_Post", x => x.post_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -98,20 +95,20 @@ namespace HomeWork.api.Migrations
                 name: "T_Staff",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    staff_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Brith = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PoliticalType = table.Column<int>(type: "int", nullable: false),
-                    Health = table.Column<string>(type: "longtext", nullable: true)
+                    staff_brithdate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    staff_political_type = table.Column<int>(type: "int", nullable: false),
+                    staff_health = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "longtext", nullable: false)
+                    staff_post_id = table.Column<int>(type: "int", nullable: false),
+                    staff_department_id = table.Column<int>(type: "int", nullable: false),
+                    staff_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_Staff", x => x.Id);
+                    table.PrimaryKey("PK_T_Staff", x => x.staff_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -119,15 +116,12 @@ namespace HomeWork.api.Migrations
                 name: "T_StaffChange",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    StaffId = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
-                    ChangeTime = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    staff_id = table.Column<int>(type: "int", nullable: false),
+                    department_id = table.Column<int>(type: "int", nullable: false),
+                    change_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_StaffChange", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -135,15 +129,26 @@ namespace HomeWork.api.Migrations
                 name: "T_StaffSalary",
                 columns: table => new
                 {
-                    StaffId = table.Column<int>(type: "int", nullable: false)
+                    salary_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Salary = table.Column<float>(type: "float", nullable: false)
+                    salary_value = table.Column<float>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_StaffSalary", x => x.StaffId);
+                    table.PrimaryKey("PK_T_StaffSalary", x => x.salary_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.InsertData(
+                table: "T_AttendanceStatus",
+                columns: new[] { "attandance_status_id", "attandance_status_type", "attendance_fine_or_bouns", "attendance_rate_fine_or_bouns" },
+                values: new object[,]
+                {
+                    { 1, "迟到", 0f, 0f },
+                    { 2, "旷工", 0f, 0f },
+                    { 3, "加班", 0f, 0f },
+                    { 4, "", 0f, 0f }
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

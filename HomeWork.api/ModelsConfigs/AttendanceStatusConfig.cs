@@ -17,7 +17,7 @@ namespace HomeWork.api.ModelsConfigs
                 new AttendanceStatus(){Id=1, EnumType="迟到"},
                 new AttendanceStatus(){Id=2, EnumType="旷工"},
                 new AttendanceStatus(){Id=3, EnumType="加班"},
-                new AttendanceStatus(){Id=4, EnumType=""},
+                new AttendanceStatus(){Id=4, EnumType="请假"},
             }) ;
         }
     }

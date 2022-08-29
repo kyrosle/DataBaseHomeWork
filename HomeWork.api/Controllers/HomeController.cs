@@ -5,7 +5,6 @@ using HomeWork.api.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using HomeWork.api.Tools;
 
 namespace HomeWork.api.Controllers
 {

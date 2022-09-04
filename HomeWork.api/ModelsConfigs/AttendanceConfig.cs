@@ -13,6 +13,14 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(e => e.AttendanceType).HasColumnName("attendance_type").HasMaxLength(20);
             builder.Property(e => e.RecordTime).HasColumnName("record_time");
             builder.Property(e => e.CountTime).HasColumnName("count_time");
+
+            builder.HasOne(at => at.AttendanceStatus).WithMany();
+            builder.HasOne(at => at.Staff).WithMany();
+
+
+            builder.HasData(new object[]
+            {
+            });
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using HomeWork.api.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeWork.api.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220903135839_init2")]
+    partial class init2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,9 +23,6 @@ namespace HomeWork.api.Migrations
 
             modelBuilder.Entity("HomeWork.api.Models.Attendance", b =>
                 {
-                    b.Property<int>("AttendanceStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("AttendanceType")
                         .HasMaxLength(20)
                         .HasColumnType("int")
@@ -40,10 +39,6 @@ namespace HomeWork.api.Migrations
                     b.Property<int>("StaffId")
                         .HasColumnType("int")
                         .HasColumnName("staff_id");
-
-                    b.HasIndex("AttendanceStatusId");
-
-                    b.HasIndex("StaffId");
 
                     b.ToTable("T_Attendance", (string)null);
                 });
@@ -242,7 +237,7 @@ namespace HomeWork.api.Migrations
                         new
                         {
                             Id = 1,
-                            Brith = new DateTime(2022, 9, 4, 22, 15, 4, 656, DateTimeKind.Local).AddTicks(5165),
+                            Brith = new DateTime(2022, 9, 3, 21, 58, 39, 250, DateTimeKind.Local).AddTicks(7796),
                             DepartmentId = 1,
                             Health = "good",
                             Name = "Staff1",
@@ -252,7 +247,7 @@ namespace HomeWork.api.Migrations
                         new
                         {
                             Id = 2,
-                            Brith = new DateTime(2022, 9, 4, 22, 15, 4, 656, DateTimeKind.Local).AddTicks(5176),
+                            Brith = new DateTime(2022, 9, 3, 21, 58, 39, 250, DateTimeKind.Local).AddTicks(7811),
                             DepartmentId = 2,
                             Health = "good",
                             Name = "Staff2",
@@ -299,25 +294,6 @@ namespace HomeWork.api.Migrations
                             SalaryId = 1,
                             Salary = 1000f
                         });
-                });
-
-            modelBuilder.Entity("HomeWork.api.Models.Attendance", b =>
-                {
-                    b.HasOne("HomeWork.api.Models.AttendanceStatus", "AttendanceStatus")
-                        .WithMany()
-                        .HasForeignKey("AttendanceStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HomeWork.api.Models.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AttendanceStatus");
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

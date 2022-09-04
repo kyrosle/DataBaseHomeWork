@@ -1,4 +1,5 @@
 using HomeWork.api.Context;
+using HomeWork.api.Service;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,7 @@ builder.Services.AddDbContext<MyDbContext>(opt =>
     var serverVersion = ServerVersion.AutoDetect(connStr);
     opt.UseMySql(connStr,serverVersion);
 });
+builder.Services.AddScoped<IDapperService, DapperService>();
 
 var app = builder.Build();
 

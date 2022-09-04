@@ -5,5 +5,6 @@
     /// </summary>
     public interface IDapperService
     {
+        public Task<object[]> Action();
     }
 }

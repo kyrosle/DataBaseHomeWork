@@ -3,6 +3,7 @@ using System;
 using HomeWork.api.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeWork.api.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220903135405_init1")]
+    partial class init1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,9 +23,6 @@ namespace HomeWork.api.Migrations
 
             modelBuilder.Entity("HomeWork.api.Models.Attendance", b =>
                 {
-                    b.Property<int>("AttendanceStatusId")
-                        .HasColumnType("int");
-
                     b.Property<int>("AttendanceType")
                         .HasMaxLength(20)
                         .HasColumnType("int")
@@ -40,10 +39,6 @@ namespace HomeWork.api.Migrations
                     b.Property<int>("StaffId")
                         .HasColumnType("int")
                         .HasColumnName("staff_id");
-
-                    b.HasIndex("AttendanceStatusId");
-
-                    b.HasIndex("StaffId");
 
                     b.ToTable("T_Attendance", (string)null);
                 });
@@ -122,20 +117,6 @@ namespace HomeWork.api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("T_Department", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ManagerId = 1,
-                            Name = "Department1"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ManagerId = 1,
-                            Name = "Department2"
-                        });
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.Political", b =>
@@ -186,20 +167,6 @@ namespace HomeWork.api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("T_Post", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Post1",
-                            SalaryId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Post2",
-                            SalaryId = 1
-                        });
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.Staff", b =>
@@ -237,28 +204,6 @@ namespace HomeWork.api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("T_Staff", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Brith = new DateTime(2022, 9, 4, 22, 15, 4, 656, DateTimeKind.Local).AddTicks(5165),
-                            DepartmentId = 1,
-                            Health = "good",
-                            Name = "Staff1",
-                            PoliticalType = 1,
-                            PostId = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Brith = new DateTime(2022, 9, 4, 22, 15, 4, 656, DateTimeKind.Local).AddTicks(5176),
-                            DepartmentId = 2,
-                            Health = "good",
-                            Name = "Staff2",
-                            PoliticalType = 2,
-                            PostId = 1
-                        });
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.StaffChange", b =>
@@ -292,32 +237,6 @@ namespace HomeWork.api.Migrations
                     b.HasKey("SalaryId");
 
                     b.ToTable("T_StaffSalary", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            SalaryId = 1,
-                            Salary = 1000f
-                        });
-                });
-
-            modelBuilder.Entity("HomeWork.api.Models.Attendance", b =>
-                {
-                    b.HasOne("HomeWork.api.Models.AttendanceStatus", "AttendanceStatus")
-                        .WithMany()
-                        .HasForeignKey("AttendanceStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HomeWork.api.Models.Staff", "Staff")
-                        .WithMany()
-                        .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AttendanceStatus");
-
-                    b.Navigation("Staff");
                 });
 #pragma warning restore 612, 618
         }

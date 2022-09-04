@@ -12,6 +12,10 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(e => e.StaffId).HasColumnName("staff_id");
             builder.Property(e => e.DepartmentId).HasColumnName("department_id");
             builder.Property(e => e.ChangeTime).HasColumnName("change_time");
+            builder.HasData(new object[]
+            {
+
+            });
         }
     }
 }

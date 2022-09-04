@@ -16,6 +16,30 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(e => e.Health).HasColumnName("staff_health");
             builder.Property(e => e.PostId).HasColumnName("staff_post_id");
             builder.Property(e => e.DepartmentId).HasColumnName("staff_department_id");
+            builder.HasData(new object[]
+            {
+                new Staff()
+                {
+                    Id=1,
+                    Name="Staff1",
+                    Brith=DateTime.Now,
+                    PoliticalType=1,
+                    Health="good",
+                    PostId=1,
+                    DepartmentId=1,
+                },
+                new Staff()
+                {
+                    Id=2,
+                    Name="Staff2",
+                    Brith=DateTime.Now,
+                    PoliticalType=2,
+                    Health="good",
+                    PostId=1,
+                    DepartmentId=2,
+
+                },
+            }); 
         }
     }
 }

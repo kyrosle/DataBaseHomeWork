@@ -11,22 +11,7 @@ namespace HomeWork.api.ModelsConfigs
             builder.ToTable("T_Department");
             builder.Property(e => e.Id).HasColumnName("department_id");
             builder.Property(e => e.Name).HasColumnName("department_name");
-            builder.Property(e => e.ManagerId).HasColumnName("department_manager_id");
-            builder.HasData(new object[]
-            {
-                new Department()
-                {
-                    Id=1,
-                    Name="Department1",
-                    ManagerId=1,
-                },
-                new Department()
-                {
-                    Id=2,
-                    Name="Department2",
-                    ManagerId=1,
-                }
-            });
+            builder.HasOne(e => e.Manager).WithMany().HasForeignKey("department_manager_id");
         }
     }
 }

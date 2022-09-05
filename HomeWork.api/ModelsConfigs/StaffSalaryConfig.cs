@@ -12,14 +12,6 @@ namespace HomeWork.api.ModelsConfigs
             builder.HasKey(e => e.SalaryId);
             builder.Property(e => e.SalaryId).HasColumnName("salary_id");
             builder.Property(e => e.Salary).HasColumnName("salary_value");
-            builder.HasData(new object[]
-            {
-                new StaffSalary()
-                {
-                    SalaryId=1,
-                    Salary=1000,
-                }
-            });
         }
     }
 }

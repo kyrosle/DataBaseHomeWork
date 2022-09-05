@@ -8,14 +8,13 @@ namespace HomeWork.api.ModelsConfigs
     {
         public void Configure(EntityTypeBuilder<Attendance> builder)
         {
-            builder.ToTable("T_Attendance").HasNoKey();
-            builder.Property(e => e.StaffId).HasColumnName("staff_id");
-            builder.Property(e => e.AttendanceType).HasColumnName("attendance_type").HasMaxLength(20);
+            builder.ToTable("T_Attendance");
+
             builder.Property(e => e.RecordTime).HasColumnName("record_time");
             builder.Property(e => e.CountTime).HasColumnName("count_time");
 
-            builder.HasOne(at => at.AttendanceStatus).WithMany();
-            builder.HasOne(at => at.Staff).WithMany();
+            builder.HasOne(at => at.AttendanceStatus).WithMany().HasForeignKey("attendance_id");
+            builder.HasOne(at => at.Staff).WithMany().HasForeignKey("staff_id");
 
 
             builder.HasData(new object[]

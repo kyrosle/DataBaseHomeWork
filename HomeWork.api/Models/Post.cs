@@ -7,8 +7,6 @@
         // 岗位 名称
 
         // 岗位 薪水
-        //public StaffSalary Saraly { get; set; }
-        // 岗位 薪水 ID
-        public int SalaryId { get; set; }
+        public StaffSalary Saraly { get; set; }
     }
 }

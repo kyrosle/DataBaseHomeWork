@@ -19,5 +19,8 @@
         public Post Post { get; set; }
         // 员工 部门 
         public Department Department { get; set; }
+        public int DepartmentId { get; set; }
+        //// 管理的部门
+        //public Department ManagerDepartment { get; set; }
     }
 }

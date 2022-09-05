@@ -12,6 +12,7 @@ builder.Services.AddDbContext<MyDbContext>(opt =>
 {
     string connStr = builder.Configuration.GetConnectionString("MyDbContext");
     var serverVersion = ServerVersion.AutoDetect(connStr);
+    opt.EnableSensitiveDataLogging(true);
     opt.UseMySql(connStr,serverVersion);
 });
 builder.Services.AddScoped<IDapperService, DapperService>();

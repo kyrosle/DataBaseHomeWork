@@ -110,17 +110,15 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("department_id");
 
+                    b.Property<int>("ManagerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("department_name");
 
-                    b.Property<int>("department_manager_id")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("department_manager_id");
 
                     b.ToTable("T_Department", (string)null);
                 });
@@ -187,6 +185,9 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("datetime(6)")
                         .HasColumnName("staff_brithdate");
 
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Health")
                         .HasColumnType("longtext")
                         .HasColumnName("staff_health");
@@ -196,22 +197,20 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("staff_name");
 
-                    b.Property<int>("staff_department_id")
+                    b.Property<int>("PoliticalTypeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("staff_political_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("staff_post_id")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("staff_department_id");
+                    b.HasIndex("DepartmentId")
+                        .IsUnique();
 
-                    b.HasIndex("staff_political_id");
+                    b.HasIndex("PoliticalTypeId");
 
-                    b.HasIndex("staff_post_id");
+                    b.HasIndex("PostId");
 
                     b.ToTable("T_Staff", (string)null);
                 });
@@ -223,6 +222,7 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ChangeTime")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasColumnName("change_time");
 
@@ -276,17 +276,6 @@ namespace HomeWork.api.Migrations
                     b.Navigation("Staff");
                 });
 
-            modelBuilder.Entity("HomeWork.api.Models.Department", b =>
-                {
-                    b.HasOne("HomeWork.api.Models.Staff", "Manager")
-                        .WithMany()
-                        .HasForeignKey("department_manager_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Manager");
-                });
-
             modelBuilder.Entity("HomeWork.api.Models.Post", b =>
                 {
                     b.HasOne("HomeWork.api.Models.StaffSalary", "Saraly")
@@ -301,20 +290,19 @@ namespace HomeWork.api.Migrations
             modelBuilder.Entity("HomeWork.api.Models.Staff", b =>
                 {
                     b.HasOne("HomeWork.api.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("staff_department_id")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne("Manager")
+                        .HasForeignKey("HomeWork.api.Models.Staff", "DepartmentId")
                         .IsRequired();
 
                     b.HasOne("HomeWork.api.Models.Political", "PoliticalType")
                         .WithMany()
-                        .HasForeignKey("staff_political_id")
+                        .HasForeignKey("PoliticalTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HomeWork.api.Models.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("staff_post_id")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -342,6 +330,12 @@ namespace HomeWork.api.Migrations
                     b.Navigation("Department");
 
                     b.Navigation("Staff");
+                });
+
+            modelBuilder.Entity("HomeWork.api.Models.Department", b =>
+                {
+                    b.Navigation("Manager")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

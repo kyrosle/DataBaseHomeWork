@@ -11,7 +11,7 @@ namespace HomeWork.api.ModelsConfigs
             builder.ToTable("T_StaffChange");
             builder.HasOne(e => e.Staff).WithMany().HasForeignKey("staff_id");
             builder.HasOne(e => e.Department).WithMany().HasForeignKey("department_id");
-            builder.Property(e => e.ChangeTime).HasColumnName("change_time");
+            builder.Property(e => e.ChangeTime).HasColumnName("change_time").ValueGeneratedOnAdd();
         }
     }
 }

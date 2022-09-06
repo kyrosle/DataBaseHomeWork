@@ -98,7 +98,7 @@ namespace HomeWork.api.Controllers
         [HttpGet]
         public async Task<ApiResponse> TestDepartment()
         {
-            var departments = await db.Departments.Select(s => s).ToArrayAsync();
+            var departments = await db.Departments.Include(dp=>dp.Staffs).Select(s => s.Name).ToArrayAsync();
             return new ApiResponse(true, departments);
         }
     }

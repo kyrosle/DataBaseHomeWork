@@ -9,16 +9,14 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Staff> builder)
         {
             builder.ToTable("T_Staff");
-            builder.Property(s => s.Id).HasColumnName("staff_id");
-            builder.Property(s => s.Name).HasColumnName("staff_name");
-            builder.Property(s => s.Brith).HasColumnName("staff_brithdate");
-            builder.Property(s => s.Health).HasColumnName("staff_health");
+            builder.Property(st => st.Id).HasColumnName("staff_id");
+            builder.Property(st => st.Name).HasColumnName("staff_name");
+            builder.Property(st => st.Brith).HasColumnName("staff_brithdate");
+            builder.Property(st => st.Health).HasColumnName("staff_health");
 
-            builder.HasOne(s => s.PoliticalType).WithMany();
+            builder.HasOne(st => st.PoliticalType).WithMany();
 
-            builder.HasOne(e => e.Post).WithMany();
-
-            builder.HasOne(st => st.Department).WithOne(dp => dp.Manager).HasForeignKey<Staff>(st => st.DepartmentId).OnDelete(DeleteBehavior.ClientSetNull);
+            builder.HasOne(st => st.Post).WithMany();
         }
     }
 }

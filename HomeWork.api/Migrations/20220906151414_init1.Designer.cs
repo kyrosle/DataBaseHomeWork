@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeWork.api.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20220905141159_init")]
-    partial class init
+    [Migration("20220906151414_init1")]
+    partial class init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -112,7 +112,7 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("department_id");
 
-                    b.Property<int>("ManagerId")
+                    b.Property<int?>("ManagerId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -121,6 +121,8 @@ namespace HomeWork.api.Migrations
                         .HasColumnName("department_name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ManagerId");
 
                     b.ToTable("T_Department", (string)null);
                 });
@@ -207,8 +209,7 @@ namespace HomeWork.api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId")
-                        .IsUnique();
+                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("PoliticalTypeId");
 
@@ -278,6 +279,15 @@ namespace HomeWork.api.Migrations
                     b.Navigation("Staff");
                 });
 
+            modelBuilder.Entity("HomeWork.api.Models.Department", b =>
+                {
+                    b.HasOne("HomeWork.api.Models.Staff", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerId");
+
+                    b.Navigation("Manager");
+                });
+
             modelBuilder.Entity("HomeWork.api.Models.Post", b =>
                 {
                     b.HasOne("HomeWork.api.Models.StaffSalary", "Saraly")
@@ -292,8 +302,8 @@ namespace HomeWork.api.Migrations
             modelBuilder.Entity("HomeWork.api.Models.Staff", b =>
                 {
                     b.HasOne("HomeWork.api.Models.Department", "Department")
-                        .WithOne("Manager")
-                        .HasForeignKey("HomeWork.api.Models.Staff", "DepartmentId")
+                        .WithMany("Staffs")
+                        .HasForeignKey("DepartmentId")
                         .IsRequired();
 
                     b.HasOne("HomeWork.api.Models.Political", "PoliticalType")
@@ -336,8 +346,7 @@ namespace HomeWork.api.Migrations
 
             modelBuilder.Entity("HomeWork.api.Models.Department", b =>
                 {
-                    b.Navigation("Manager")
-                        .IsRequired();
+                    b.Navigation("Staffs");
                 });
 #pragma warning restore 612, 618
         }

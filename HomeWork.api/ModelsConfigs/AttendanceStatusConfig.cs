@@ -14,11 +14,11 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(e => e.FineOrBouns).HasColumnName("attendance_fine_or_bouns");
             builder.Property(e => e.RateFineOrBouns).HasColumnName("attendance_rate_fine_or_bouns");
             builder.HasData(new object[]{
-                new AttendanceStatus(){Id=1, EnumType="迟到"},
-                new AttendanceStatus(){Id=2, EnumType="旷工"},
-                new AttendanceStatus(){Id=3, EnumType="加班"},
-                new AttendanceStatus(){Id=4, EnumType="请假"},
-            }) ;
+                new AttendanceStatus(){Id=1, EnumType="迟到", FineOrBouns=100, RateFineOrBouns=10},
+                new AttendanceStatus(){Id=2, EnumType="旷工", FineOrBouns=100, RateFineOrBouns=10},
+                new AttendanceStatus(){Id=3, EnumType="加班", FineOrBouns=100, RateFineOrBouns=10},
+                new AttendanceStatus(){Id=4, EnumType="请假", FineOrBouns=100, RateFineOrBouns=10},
+            });
         }
     }
 }

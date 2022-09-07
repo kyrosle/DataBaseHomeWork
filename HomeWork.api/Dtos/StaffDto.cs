@@ -1,51 +1,26 @@
 ﻿using HomeWork.api.Dtos.Datadictionary;
+using HomeWork.api.Models;
 
 namespace HomeWork.api.Dtos
 {
     public class StaffDto : IdentityDto
     {
-        private DateTime brith;
+        // 员工 ID
 
-        public DateTime Brith
-        {
-            get { return brith; }
-            set { brith = value; }
-        }
-        private int polical;
-        public Polical PolicalType
-        {
-            get
-            {
-                if (Enum.IsDefined(typeof(Polical), (Polical)polical))
-                    return (Polical)polical;
-                else return Polical.Unknown;
-            }
-            set { polical = (int)value; }
-        }
+        // 员工 名称
 
-        private string? healthStatus;
+        // 员工 生日
+        public DateTime Brith { get; set; }
 
-        public string HealthStatus
-        {
-            get { return healthStatus; }
-            set { healthStatus = value; }
-        }
+        // 员工 政治面貌
+        public Polical PoliticalType { get; set; }
 
-        private PostDto postStatus;
+        // 员工 健康情况
+        public string? Health { get; set; }
 
-        public PostDto PostStatus
-        {
-            get { return postStatus; }
-            set { postStatus = value; }
-        }
-
-        private DepartmentDto departmentStatus;
-
-        public DepartmentDto DepartmentStatus
-        {
-            get { return departmentStatus; }
-            set { departmentStatus = value; }
-        }
-
+        // 员工 岗位 
+        public Post Post { get; set; }
+        // 员工 部门 
+        public string Department { get; set; }
     }
 }

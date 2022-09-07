@@ -7,6 +7,6 @@
         // 岗位 名称
 
         // 岗位 薪水
-        public StaffSalary Saraly { get; set; }
+        public float Saraly { get; set; }
     }
 }

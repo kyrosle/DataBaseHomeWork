@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeWork.api.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20220907012907_init")]
+    [Migration("20220907082617_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

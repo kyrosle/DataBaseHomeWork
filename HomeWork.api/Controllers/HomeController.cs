@@ -1,4 +1,5 @@
 ﻿using HomeWork.api.Context;
+using HomeWork.api.Dtos;
 using HomeWork.api.Models;
 using HomeWork.api.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -37,8 +38,8 @@ namespace HomeWork.api.Controllers
             var atsType = await db.AttendanceStatuses.Where(ats => ats.Id == 2).FirstOrDefaultAsync();
             db.Attendances.Add(new Attendance
             {
-                Staff = staff,
-                AttendanceStatus = atsType,
+                Staff = staff!,
+                AttendanceStatus = atsType!,
                 RecordTime = DateTime.Now,
                 CountTime = 100
             });
@@ -90,20 +91,39 @@ namespace HomeWork.api.Controllers
         [HttpGet]
         public async Task<ApiResponse> TestUser()
         {
-            var staffs = await db.Staffs.Select(s => s).ToArrayAsync();
+            var staffs = await db.Staffs.Include(st=>st.Post).Include(st=>st.Department).Select(st => st).ToArrayAsync();
             return new ApiResponse(true, staffs);
         }
         [HttpGet]
         public async Task<ApiResponse> TestDepartment()
         {
-            var departments = await db.Departments.Include(dp => dp.Staffs).Select(s => new
+            // 利用匿名类 消除 orm model 序列化时候带来的循环引用
+            //var departments = await db.Departments.Include(dp => dp.Staffs).Select(s => new
+            //{
+            //    Department_Id = s.Id,
+            //    Department_Name = s.Name,
+            //    Department_Staffs = s.Staffs.Select(st => new
+            //    {
+            //        Staff_Id = st.Id,
+            //        Staff_Name = st.Name,
+            //        Staff_Brith = st.Brith,
+            //        Staff_Post = st.Post
+            //    })
+            //}).ToArrayAsync();
+            //var departments = await db.Departments.Select(dp => dp).ToArrayAsync();
+            var departments = await db.Departments.Select(s => new DepartmentDto()
             {
-                s.Id,
-                s.Name,
-                s.Manager.Name,
-
+                Id = s.Id,
+                Name = s.Name,
+                Manger = new StaffDto()
+                {
+                    Id = s.Manager.Id,
+                    Name = s.Manager.Name,
+                    Department = s.Manager.Department.Name
+                }
             }).ToArrayAsync();
-            return new ApiResponse(true, "ok");
+            //var staffs = await db.Departments.Include(dp=>db.Staffs)
+            return new ApiResponse(true, departments);
         }
     }
 }

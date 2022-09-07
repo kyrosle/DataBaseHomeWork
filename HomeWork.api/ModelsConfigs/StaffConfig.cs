@@ -17,6 +17,8 @@ namespace HomeWork.api.ModelsConfigs
             builder.HasOne(st => st.PoliticalType).WithMany();
 
             builder.HasOne(st => st.Post).WithMany();
+
+            builder.HasOne(st => st.Salary).WithMany().HasForeignKey("salary_id").OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

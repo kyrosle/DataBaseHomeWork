@@ -3,7 +3,7 @@
     public class AttendanceStatus : EnumModel
     {
         // 奖罚
-        public float FineOrBouns { get; set; }
+        public int FineOrBouns { get; set; }
         // 奖罚的比率
         public float RateFineOrBouns { get; set; }
     }

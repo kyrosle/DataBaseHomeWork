@@ -1,11 +1,8 @@
 ﻿using HomeWork.api.Context;
-using System.Linq;
 using HomeWork.api.Models;
 using HomeWork.api.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
-
 namespace HomeWork.api.Controllers
 {
     [ApiController]
@@ -68,6 +65,7 @@ namespace HomeWork.api.Controllers
             var manager1 = new Staff { Name = "Manager1", Post = post1, Department = department1, Health = "good", Brith = DateTime.Now, PoliticalType = politicalType[1] };
             var manager2 = new Staff { Name = "Manager2", Post = post2, Department = department2, Health = "good", Brith = DateTime.Now, PoliticalType = politicalType[1] };
 
+
             await db.Staffs.AddRangeAsync(new Staff[] { manager1, manager2 });
 
             await db.SaveChangesAsync();
@@ -98,8 +96,14 @@ namespace HomeWork.api.Controllers
         [HttpGet]
         public async Task<ApiResponse> TestDepartment()
         {
-            var departments = await db.Departments.Include(dp=>dp.Staffs).Select(s => s.Name).ToArrayAsync();
-            return new ApiResponse(true, departments);
+            var departments = await db.Departments.Include(dp => dp.Staffs).Select(s => new
+            {
+                s.Id,
+                s.Name,
+                s.Manager.Name,
+
+            }).ToArrayAsync();
+            return new ApiResponse(true, "ok");
         }
     }
 }

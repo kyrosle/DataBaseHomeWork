@@ -110,17 +110,17 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("department_id");
 
-                    b.Property<int?>("ManagerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("department_name");
 
+                    b.Property<int?>("manager_id")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ManagerId");
+                    b.HasIndex("manager_id");
 
                     b.ToTable("T_Department", (string)null);
                 });
@@ -281,7 +281,7 @@ namespace HomeWork.api.Migrations
                 {
                     b.HasOne("HomeWork.api.Models.Staff", "Manager")
                         .WithMany()
-                        .HasForeignKey("ManagerId");
+                        .HasForeignKey("manager_id");
 
                     b.Navigation("Manager");
                 });

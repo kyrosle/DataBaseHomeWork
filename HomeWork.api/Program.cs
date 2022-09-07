@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllers();
+
+
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MyDbContext>(opt =>
@@ -16,6 +19,7 @@ builder.Services.AddDbContext<MyDbContext>(opt =>
     opt.UseMySql(connStr,serverVersion);
 });
 builder.Services.AddScoped<IDapperService, DapperService>();
+
 
 var app = builder.Build();
 

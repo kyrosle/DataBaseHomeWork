@@ -12,6 +12,8 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(dp => dp.Id).HasColumnName("department_id");
             builder.Property(dp => dp.Name).HasColumnName("department_name");
 
+            builder.HasOne(dp => dp.Manager).WithMany().HasForeignKey("manager_id");
+
             builder.HasMany(dp => dp.Staffs).WithOne(st => st.Department).OnDelete(DeleteBehavior.ClientSetNull);
         }
     }

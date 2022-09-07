@@ -110,7 +110,7 @@ namespace HomeWork.api.Migrations
                 {
                     department_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    ManagerId = table.Column<int>(type: "int", nullable: false),
+                    manager_id = table.Column<int>(type: "int", nullable: true),
                     department_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -218,9 +218,9 @@ namespace HomeWork.api.Migrations
                 column: "staff_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Department_ManagerId",
+                name: "IX_T_Department_manager_id",
                 table: "T_Department",
-                column: "ManagerId");
+                column: "manager_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_Post_saraly_id",
@@ -261,18 +261,17 @@ namespace HomeWork.api.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_T_Department_T_Staff_ManagerId",
+                name: "FK_T_Department_T_Staff_manager_id",
                 table: "T_Department",
-                column: "ManagerId",
+                column: "manager_id",
                 principalTable: "T_Staff",
-                principalColumn: "staff_id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "staff_id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_T_Department_T_Staff_ManagerId",
+                name: "FK_T_Department_T_Staff_manager_id",
                 table: "T_Department");
 
             migrationBuilder.DropTable(

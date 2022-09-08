@@ -12,10 +12,10 @@ namespace HomeWork.api.Dtos.DtosMapper
                 {
                     Id=src.Manager.Id,
                     Name=src.Manager.Name,
-                    Brith=src.Manager.Brith,
-                    Health=src.Manager.Health,
-                    Post=src.Manager.Post.Name,
-                    PoliticalType=(Datadictionary.Political)src.Manager.PoliticalType.Id,
+                    Brith = src.Manager.Brith,
+                    Health = src.Manager.Health,
+                    Post = src.Manager.Post.Name,
+                    //PoliticalType=(Datadictionary.Political)src.Manager.PoliticalType.Id,
                 });
         }
     }

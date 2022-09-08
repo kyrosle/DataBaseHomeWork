@@ -1,4 +1,4 @@
-﻿namespace HomeWork.api.Share
+﻿namespace HomeWork.Share.Parmeters
 {
     public class QueryParameter
     {

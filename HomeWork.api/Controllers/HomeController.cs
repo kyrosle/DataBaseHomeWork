@@ -116,9 +116,27 @@ namespace HomeWork.api.Controllers
             //var departments = await db.Departments.Select(dp => dp).ToArrayAsync();
             //var staffs = await db.Departments.Include(dp=>db.Staffs)
 
+            // 使用 dto 分离 model 和 数据展示
+            // Department : Manager 字段 为 Staff?
+            // Linq 里面是否需要判空？
             var config = (TypeAdapterConfig)provider.GetRequiredService(typeof(TypeAdapterConfig));
-            var departments = await db.Departments.Include(dp=>dp.Manager).Select(dp => dp).ToArrayAsync();
-            var result = departments.Adapt<DepartmentDto>(config);
+            var departments = await db.Departments
+                .Include(dp => dp.Manager)
+                .Include(dp => dp.Manager.Post)
+                .Include(dp=>dp.Manager.Department)
+                .Select(dp => dp).ToArrayAsync();
+            //! post 实体 为 null
+            //var departmentsQuery = from dp in db.Departments
+            //                       join staff in db.Staffs on dp.Manager.Id equals staff.Id
+            //                       select dp;
+            //var departments = await departmentsQuery.ToArrayAsync();
+            List<DepartmentDto> result = new();
+            foreach (var dp in departments)
+            {
+                Console.WriteLine(dp.Manager.Post.Name);
+                var item = dp.Adapt<DepartmentDto>(config);
+                result.Add(item);
+            }
             return new ApiResponse(true, result);
         }
     }

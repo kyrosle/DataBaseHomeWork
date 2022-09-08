@@ -19,7 +19,7 @@ namespace HomeWork.api.Migrations
                 {
                     attandance_status_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    attendance_fine_or_bouns = table.Column<float>(type: "float", nullable: false),
+                    attendance_fine_or_bouns = table.Column<int>(type: "int", nullable: false),
                     attendance_rate_fine_or_bouns = table.Column<float>(type: "float", nullable: false),
                     attandance_status_type = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -76,8 +76,7 @@ namespace HomeWork.api.Migrations
                         name: "FK_T_Post_T_StaffSalary_saraly_id",
                         column: x => x.saraly_id,
                         principalTable: "T_StaffSalary",
-                        principalColumn: "salary_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "salary_id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -127,10 +126,10 @@ namespace HomeWork.api.Migrations
                     staff_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     staff_brithdate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PoliticalTypeId = table.Column<int>(type: "int", nullable: false),
+                    political_id = table.Column<int>(type: "int", nullable: false),
                     staff_health = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PostId = table.Column<int>(type: "int", nullable: false),
+                    post_id = table.Column<int>(type: "int", nullable: false),
                     DepartmentId = table.Column<int>(type: "int", nullable: false),
                     staff_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
@@ -144,14 +143,14 @@ namespace HomeWork.api.Migrations
                         principalTable: "T_Department",
                         principalColumn: "department_id");
                     table.ForeignKey(
-                        name: "FK_T_Staff_T_Political_PoliticalTypeId",
-                        column: x => x.PoliticalTypeId,
+                        name: "FK_T_Staff_T_Political_political_id",
+                        column: x => x.political_id,
                         principalTable: "T_Political",
                         principalColumn: "political_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_T_Staff_T_Post_PostId",
-                        column: x => x.PostId,
+                        name: "FK_T_Staff_T_Post_post_id",
+                        column: x => x.post_id,
                         principalTable: "T_Post",
                         principalColumn: "post_id",
                         onDelete: ReferentialAction.Cascade);
@@ -192,10 +191,10 @@ namespace HomeWork.api.Migrations
                 columns: new[] { "attandance_status_id", "attandance_status_type", "attendance_fine_or_bouns", "attendance_rate_fine_or_bouns" },
                 values: new object[,]
                 {
-                    { 1, "迟到", 0f, 0f },
-                    { 2, "旷工", 0f, 0f },
-                    { 3, "加班", 0f, 0f },
-                    { 4, "请假", 0f, 0f }
+                    { 1, "迟到", 100, 10f },
+                    { 2, "旷工", 100, 10f },
+                    { 3, "加班", 100, 10f },
+                    { 4, "请假", 100, 10f }
                 });
 
             migrationBuilder.InsertData(
@@ -233,14 +232,14 @@ namespace HomeWork.api.Migrations
                 column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Staff_PoliticalTypeId",
+                name: "IX_T_Staff_political_id",
                 table: "T_Staff",
-                column: "PoliticalTypeId");
+                column: "political_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Staff_PostId",
+                name: "IX_T_Staff_post_id",
                 table: "T_Staff",
-                column: "PostId");
+                column: "post_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_StaffChange_department_id",

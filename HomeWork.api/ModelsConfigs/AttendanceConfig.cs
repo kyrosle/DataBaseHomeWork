@@ -15,11 +15,6 @@ namespace HomeWork.api.ModelsConfigs
 
             builder.HasOne(at => at.AttendanceStatus).WithMany().HasForeignKey("attendance_id");
             builder.HasOne(at => at.Staff).WithMany().HasForeignKey("staff_id");
-
-
-            builder.HasData(new object[]
-            {
-            });
         }
     }
 }

@@ -1,6 +1,9 @@
 using HomeWork.api.Context;
 using HomeWork.api.Service;
+using Mapster;
+using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +19,15 @@ builder.Services.AddDbContext<MyDbContext>(opt =>
     string connStr = builder.Configuration.GetConnectionString("MyDbContext");
     var serverVersion = ServerVersion.AutoDetect(connStr);
     opt.EnableSensitiveDataLogging(true);
-    opt.UseMySql(connStr,serverVersion);
+    opt.UseMySql(connStr, serverVersion);
 });
 builder.Services.AddScoped<IDapperService, DapperService>();
+
+var config = new TypeAdapterConfig();
+config.Scan(Assembly.GetExecutingAssembly());
+builder.Services.AddSingleton(config);
+//builder.Services.AddScoped<IMapper, ServiceMapper>();
+
 
 
 var app = builder.Build();
@@ -36,3 +45,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

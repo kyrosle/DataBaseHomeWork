@@ -2,6 +2,7 @@
 using HomeWork.api.Dtos;
 using HomeWork.api.Models;
 using HomeWork.api.Service;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace HomeWork.api.Controllers
@@ -12,11 +13,13 @@ namespace HomeWork.api.Controllers
     {
         private readonly MyDbContext db;
         private readonly IDapperService dapper;
+        private readonly IServiceProvider provider;
 
-        public HomeController(MyDbContext db, IDapperService dapper)
+        public HomeController(MyDbContext db, IDapperService dapper, IServiceProvider provider)
         {
             this.db = db;
             this.dapper = dapper;
+            this.provider = provider;
         }
         [HttpGet]
         public async Task<ApiResponse> Test()
@@ -91,7 +94,7 @@ namespace HomeWork.api.Controllers
         [HttpGet]
         public async Task<ApiResponse> TestUser()
         {
-            var staffs = await db.Staffs.Include(st=>st.Post).Include(st=>st.Department).Select(st => st).ToArrayAsync();
+            var staffs = await db.Staffs.Include(st => st.Post).Include(st => st.Department).Select(st => st).ToArrayAsync();
             return new ApiResponse(true, staffs);
         }
         [HttpGet]
@@ -111,19 +114,12 @@ namespace HomeWork.api.Controllers
             //    })
             //}).ToArrayAsync();
             //var departments = await db.Departments.Select(dp => dp).ToArrayAsync();
-            var departments = await db.Departments.Select(s => new DepartmentDto()
-            {
-                Id = s.Id,
-                Name = s.Name,
-                Manger = new StaffDto()
-                {
-                    Id = s.Manager.Id,
-                    Name = s.Manager.Name,
-                    Department = s.Manager.Department.Name
-                }
-            }).ToArrayAsync();
             //var staffs = await db.Departments.Include(dp=>db.Staffs)
-            return new ApiResponse(true, departments);
+
+            var config = (TypeAdapterConfig)provider.GetRequiredService(typeof(TypeAdapterConfig));
+            var departments = await db.Departments.Include(dp=>dp.Manager).Select(dp => dp).ToArrayAsync();
+            var result = departments.Adapt<DepartmentDto>(config);
+            return new ApiResponse(true, result);
         }
     }
 }

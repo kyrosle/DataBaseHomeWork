@@ -60,8 +60,8 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("attandance_status_type");
 
-                    b.Property<float>("FineOrBouns")
-                        .HasColumnType("float")
+                    b.Property<int>("FineOrBouns")
+                        .HasColumnType("int")
                         .HasColumnName("attendance_fine_or_bouns");
 
                     b.Property<float>("RateFineOrBouns")
@@ -77,29 +77,29 @@ namespace HomeWork.api.Migrations
                         {
                             Id = 1,
                             EnumType = "迟到",
-                            FineOrBouns = 0f,
-                            RateFineOrBouns = 0f
+                            FineOrBouns = 100,
+                            RateFineOrBouns = 10f
                         },
                         new
                         {
                             Id = 2,
                             EnumType = "旷工",
-                            FineOrBouns = 0f,
-                            RateFineOrBouns = 0f
+                            FineOrBouns = 100,
+                            RateFineOrBouns = 10f
                         },
                         new
                         {
                             Id = 3,
                             EnumType = "加班",
-                            FineOrBouns = 0f,
-                            RateFineOrBouns = 0f
+                            FineOrBouns = 100,
+                            RateFineOrBouns = 10f
                         },
                         new
                         {
                             Id = 4,
                             EnumType = "请假",
-                            FineOrBouns = 0f,
-                            RateFineOrBouns = 0f
+                            FineOrBouns = 100,
+                            RateFineOrBouns = 10f
                         });
                 });
 
@@ -115,7 +115,7 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("department_name");
 
-                    b.Property<int>("manager_id")
+                    b.Property<int?>("manager_id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -199,19 +199,19 @@ namespace HomeWork.api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("staff_name");
 
-                    b.Property<int>("PoliticalTypeId")
+                    b.Property<int>("political_id")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostId")
+                    b.Property<int>("post_id")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
-                    b.HasIndex("PoliticalTypeId");
+                    b.HasIndex("political_id");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("post_id");
 
                     b.ToTable("T_Staff", (string)null);
                 });
@@ -281,9 +281,7 @@ namespace HomeWork.api.Migrations
                 {
                     b.HasOne("HomeWork.api.Models.Staff", "Manager")
                         .WithMany()
-                        .HasForeignKey("manager_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("manager_id");
 
                     b.Navigation("Manager");
                 });
@@ -293,7 +291,6 @@ namespace HomeWork.api.Migrations
                     b.HasOne("HomeWork.api.Models.StaffSalary", "Saraly")
                         .WithMany()
                         .HasForeignKey("saraly_id")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Saraly");
@@ -308,13 +305,13 @@ namespace HomeWork.api.Migrations
 
                     b.HasOne("HomeWork.api.Models.Political", "PoliticalType")
                         .WithMany()
-                        .HasForeignKey("PoliticalTypeId")
+                        .HasForeignKey("political_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HomeWork.api.Models.Post", "Post")
                         .WithMany()
-                        .HasForeignKey("PostId")
+                        .HasForeignKey("post_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

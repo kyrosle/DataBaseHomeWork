@@ -14,11 +14,9 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(st => st.Brith).HasColumnName("staff_brithdate");
             builder.Property(st => st.Health).HasColumnName("staff_health");
 
-            builder.HasOne(st => st.PoliticalType).WithMany();
+            builder.HasOne(st => st.PoliticalType).WithMany().HasForeignKey("political_id");
 
-            builder.HasOne(st => st.Post).WithMany();
-
-            builder.HasOne(st => st.Salary).WithMany().HasForeignKey("salary_id").OnDelete(DeleteBehavior.ClientSetNull);
+            builder.HasOne(st => st.Post).WithMany().HasForeignKey("post_id");
         }
     }
 }

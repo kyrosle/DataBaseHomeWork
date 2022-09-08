@@ -19,7 +19,5 @@
         public Post Post { get; set; }
         // 员工 部门 
         public Department Department { get; set; }
-
-        public StaffSalary Salary { get; set; }
     }
 }

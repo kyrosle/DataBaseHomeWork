@@ -1,5 +1,4 @@
 ﻿using HomeWork.api.Dtos.Datadictionary;
-using HomeWork.api.Models;
 
 namespace HomeWork.api.Dtos
 {
@@ -13,13 +12,13 @@ namespace HomeWork.api.Dtos
         public DateTime Brith { get; set; }
 
         // 员工 政治面貌
-        public Polical PoliticalType { get; set; }
+        public Political PoliticalType { get; set; }
 
         // 员工 健康情况
         public string? Health { get; set; }
 
         // 员工 岗位 
-        public Post Post { get; set; }
+        public string Post { get; set; }
         // 员工 部门 
         public string Department { get; set; }
     }

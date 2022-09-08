@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using HomeWork.api.Dtos;
+using Mapster;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HomeWork.api.Models
 {

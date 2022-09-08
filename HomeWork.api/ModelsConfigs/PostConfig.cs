@@ -11,6 +11,7 @@ namespace HomeWork.api.ModelsConfigs
             builder.ToTable("T_Post");
             builder.Property(e => e.Id).HasColumnName("post_id");
             builder.Property(e => e.Name).HasColumnName("post_name");
+            builder.HasOne(p => p.Saraly).WithMany().HasForeignKey("saraly_id").OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

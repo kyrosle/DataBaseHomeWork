@@ -1,4 +1,6 @@
-﻿using HomeWork.api.Share;
+﻿
+using HomeWork.App.Service;
+using HomeWork.Share.Parmeters;
 
 namespace HomeWork.api.Service
 {

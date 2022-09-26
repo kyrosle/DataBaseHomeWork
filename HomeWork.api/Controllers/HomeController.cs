@@ -2,6 +2,7 @@
 using HomeWork.api.Dtos;
 using HomeWork.api.Models;
 using HomeWork.api.Service;
+using HomeWork.App.Service;
 using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -1,4 +1,4 @@
-﻿namespace HomeWork.api.Dtos
+﻿namespace HomeWork.Share.Dtos
 {
     public class PostDto
     {

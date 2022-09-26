@@ -1,7 +1,6 @@
 ﻿using HomeWork.api.Context;
-using HomeWork.api.Dtos;
 using HomeWork.api.Models;
-using HomeWork.App.Service;
+using HomeWork.Share.Dtos;
 using HomeWork.Share.Parmeters;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
@@ -11,14 +10,16 @@ namespace HomeWork.Api.Service
     public class StaffService : IStaffServiece
     {
         private readonly MyDbContext db;
+        private readonly IMapper mapper;
 
-        public StaffService(MyDbContext db)
+        public StaffService(MyDbContext db, IMapper mapper)
         {
             this.db = db;
+            this.mapper = mapper;
         }
         public Task<ApiResponse> AddAsync(StaffDto model)
         {
-            var staff = mapper.Map<Staff>(model);
+            throw new NotImplementedException();
         }
 
         public Task<ApiResponse> DeleteAsync(int id)
@@ -26,9 +27,24 @@ namespace HomeWork.Api.Service
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse> GetAllAsync(QueryParameter parameter)
+        public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //var staffsQry = from staff in db.Staffs select staff;
+                if (parameter.PageSize == 0) parameter.PageSize = 20;
+                IQueryable<Staff> staffsQuery = db.Staffs
+                    .Skip(parameter.PageIndex * parameter.PageSize)
+                    .Take(parameter.PageSize)
+                    .Where(st => !string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search));
+                var staffModels = await staffsQuery.ToArrayAsync();
+                var staffs = staffModels.Select(stm => mapper.Map<StaffDto>(stm)).ToArray();
+                return new ApiResponse(true, staffs);
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse(e.Message);
+            }
         }
 
         public Task<ApiResponse> GetSingleAsync(int id)

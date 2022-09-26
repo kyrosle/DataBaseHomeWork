@@ -1,5 +1,5 @@
-﻿using HomeWork.api.Dtos;
-using HomeWork.api.Service;
+﻿using HomeWork.api.Service;
+using HomeWork.Share.Dtos;
 
 namespace HomeWork.Api.Service
 {

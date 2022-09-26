@@ -1,5 +1,5 @@
 ﻿
-using HomeWork.App.Service;
+using HomeWork.Api.Service;
 using HomeWork.Share.Parmeters;
 
 namespace HomeWork.api.Service

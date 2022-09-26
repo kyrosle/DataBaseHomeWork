@@ -1,4 +1,4 @@
-﻿namespace HomeWork.App.Service
+﻿namespace HomeWork.Api.Service
 {
     public class ApiResponse
     {

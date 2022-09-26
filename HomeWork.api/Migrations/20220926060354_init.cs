@@ -4,13 +4,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace HomeWork.api.Migrations
+namespace HomeWork.Api.Migrations
 {
     public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "T_Attendance",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    StaffId = table.Column<int>(type: "int", nullable: false),
+                    AttendanceStatusId = table.Column<int>(type: "int", nullable: false),
+                    record_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    count_time = table.Column<float>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_Attendance", x => x.Id);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -65,7 +82,7 @@ namespace HomeWork.api.Migrations
                 {
                     post_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    saraly_id = table.Column<int>(type: "int", nullable: false),
+                    staff_salary_id = table.Column<int>(type: "int", nullable: false),
                     post_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -73,32 +90,10 @@ namespace HomeWork.api.Migrations
                 {
                     table.PrimaryKey("PK_T_Post", x => x.post_id);
                     table.ForeignKey(
-                        name: "FK_T_Post_T_StaffSalary_saraly_id",
-                        column: x => x.saraly_id,
+                        name: "FK_T_Post_T_StaffSalary_staff_salary_id",
+                        column: x => x.staff_salary_id,
                         principalTable: "T_StaffSalary",
-                        principalColumn: "salary_id");
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "T_Attendance",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    staff_id = table.Column<int>(type: "int", nullable: false),
-                    attendance_id = table.Column<int>(type: "int", nullable: false),
-                    record_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    count_time = table.Column<float>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_T_Attendance", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_T_Attendance_T_AttendanceStatus_attendance_id",
-                        column: x => x.attendance_id,
-                        principalTable: "T_AttendanceStatus",
-                        principalColumn: "attandance_status_id",
+                        principalColumn: "salary_id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -109,7 +104,7 @@ namespace HomeWork.api.Migrations
                 {
                     department_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    manager_id = table.Column<int>(type: "int", nullable: true),
+                    department_manager_id = table.Column<int>(type: "int", nullable: true),
                     department_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -126,11 +121,11 @@ namespace HomeWork.api.Migrations
                     staff_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     staff_brithdate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    political_id = table.Column<int>(type: "int", nullable: false),
+                    PoliticalType = table.Column<int>(type: "int", nullable: false),
                     staff_health = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    post_id = table.Column<int>(type: "int", nullable: false),
-                    DepartmentId = table.Column<int>(type: "int", nullable: false),
+                    staff_post_id = table.Column<int>(type: "int", nullable: true),
+                    staff_department_id = table.Column<int>(type: "int", nullable: true),
                     staff_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -138,22 +133,15 @@ namespace HomeWork.api.Migrations
                 {
                     table.PrimaryKey("PK_T_Staff", x => x.staff_id);
                     table.ForeignKey(
-                        name: "FK_T_Staff_T_Department_DepartmentId",
-                        column: x => x.DepartmentId,
+                        name: "FK_T_Staff_T_Department_staff_department_id",
+                        column: x => x.staff_department_id,
                         principalTable: "T_Department",
                         principalColumn: "department_id");
                     table.ForeignKey(
-                        name: "FK_T_Staff_T_Political_political_id",
-                        column: x => x.political_id,
-                        principalTable: "T_Political",
-                        principalColumn: "political_id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_T_Staff_T_Post_post_id",
-                        column: x => x.post_id,
+                        name: "FK_T_Staff_T_Post_staff_post_id",
+                        column: x => x.staff_post_id,
                         principalTable: "T_Post",
-                        principalColumn: "post_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "post_id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -163,10 +151,12 @@ namespace HomeWork.api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    staff_id = table.Column<int>(type: "int", nullable: false),
-                    department_id = table.Column<int>(type: "int", nullable: false),
+                    StaffId = table.Column<int>(type: "int", nullable: false),
+                    DepartmentId = table.Column<int>(type: "int", nullable: false),
                     change_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    department_id = table.Column<int>(type: "int", nullable: false),
+                    staff_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,39 +197,24 @@ namespace HomeWork.api.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Attendance_attendance_id",
-                table: "T_Attendance",
-                column: "attendance_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_T_Attendance_staff_id",
-                table: "T_Attendance",
-                column: "staff_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_T_Department_manager_id",
+                name: "IX_T_Department_department_manager_id",
                 table: "T_Department",
-                column: "manager_id");
+                column: "department_manager_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Post_saraly_id",
+                name: "IX_T_Post_staff_salary_id",
                 table: "T_Post",
-                column: "saraly_id");
+                column: "staff_salary_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Staff_DepartmentId",
+                name: "IX_T_Staff_staff_department_id",
                 table: "T_Staff",
-                column: "DepartmentId");
+                column: "staff_department_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Staff_political_id",
+                name: "IX_T_Staff_staff_post_id",
                 table: "T_Staff",
-                column: "political_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_T_Staff_post_id",
-                table: "T_Staff",
-                column: "post_id");
+                column: "staff_post_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_StaffChange_department_id",
@@ -252,17 +227,9 @@ namespace HomeWork.api.Migrations
                 column: "staff_id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_T_Attendance_T_Staff_staff_id",
-                table: "T_Attendance",
-                column: "staff_id",
-                principalTable: "T_Staff",
-                principalColumn: "staff_id",
-                onDelete: ReferentialAction.Cascade);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_T_Department_T_Staff_manager_id",
+                name: "FK_T_Department_T_Staff_department_manager_id",
                 table: "T_Department",
-                column: "manager_id",
+                column: "department_manager_id",
                 principalTable: "T_Staff",
                 principalColumn: "staff_id");
         }
@@ -270,26 +237,26 @@ namespace HomeWork.api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_T_Department_T_Staff_manager_id",
+                name: "FK_T_Department_T_Staff_department_manager_id",
                 table: "T_Department");
 
             migrationBuilder.DropTable(
                 name: "T_Attendance");
 
             migrationBuilder.DropTable(
-                name: "T_StaffChange");
+                name: "T_AttendanceStatus");
 
             migrationBuilder.DropTable(
-                name: "T_AttendanceStatus");
+                name: "T_Political");
+
+            migrationBuilder.DropTable(
+                name: "T_StaffChange");
 
             migrationBuilder.DropTable(
                 name: "T_Staff");
 
             migrationBuilder.DropTable(
                 name: "T_Department");
-
-            migrationBuilder.DropTable(
-                name: "T_Political");
 
             migrationBuilder.DropTable(
                 name: "T_Post");

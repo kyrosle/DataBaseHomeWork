@@ -1,4 +1,4 @@
-﻿namespace HomeWork.api.Dtos.Datadictionary
+﻿namespace HomeWork.Share.Dtos.Datadictionary
 {
     public enum Political
     {

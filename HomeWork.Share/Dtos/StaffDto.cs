@@ -1,6 +1,6 @@
-﻿using HomeWork.api.Dtos.Datadictionary;
+﻿using HomeWork.Share.Dtos.Datadictionary;
 
-namespace HomeWork.api.Dtos
+namespace HomeWork.Share.Dtos
 {
     public class StaffDto : IdentityDto
     {
@@ -18,8 +18,10 @@ namespace HomeWork.api.Dtos
         public string? Health { get; set; }
 
         // 员工 岗位 
-        public PostDto Post { get; set; }
+        public int? PostId { get; set; }
+        public string? PostName { get; set; }
         // 员工 部门 
-        public DepartmentDto Department { get; set; }
+        public int? DepartmentId { get; set; }
+        public string? DepartmentName { get; set; }
     }
 }

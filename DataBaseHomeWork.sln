@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWork.Api", "HomeWork.ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWork.App", "HomeWork.App\HomeWork.App.csproj", "{A2DE0909-2488-4598-9197-A1EBABD1B33E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeWork.Share", "HomeWork.Share\HomeWork.Share.csproj", "{F311C89B-7D5B-4338-BB32-35C693BB0F57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWork.Share", "HomeWork.Share\HomeWork.Share.csproj", "{F311C89B-7D5B-4338-BB32-35C693BB0F57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeWork.Consle", "HomeWork.Consle\HomeWork.Consle.csproj", "{AC08CE95-D891-426A-8FA2-62722D14E3CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{F311C89B-7D5B-4338-BB32-35C693BB0F57}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F311C89B-7D5B-4338-BB32-35C693BB0F57}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F311C89B-7D5B-4338-BB32-35C693BB0F57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC08CE95-D891-426A-8FA2-62722D14E3CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC08CE95-D891-426A-8FA2-62722D14E3CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC08CE95-D891-426A-8FA2-62722D14E3CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC08CE95-D891-426A-8FA2-62722D14E3CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

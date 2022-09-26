@@ -13,8 +13,6 @@ namespace HomeWork.api.ModelsConfigs
             builder.Property(e => e.RecordTime).HasColumnName("record_time");
             builder.Property(e => e.CountTime).HasColumnName("count_time");
 
-            builder.HasOne(at => at.AttendanceStatus).WithMany().HasForeignKey("attendance_id");
-            builder.HasOne(at => at.Staff).WithMany().HasForeignKey("staff_id");
         }
     }
 }

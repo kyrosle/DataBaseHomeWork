@@ -10,14 +10,14 @@
         public DateTime Brith { get; set; }
 
         // 员工 政治面貌
-        public Political PoliticalType { get; set; }
+        public int PoliticalType { get; set; }
 
         // 员工 健康情况
         public string? Health { get; set; }
 
         // 员工 岗位 
-        public Post Post { get; set; }
+        public int? PostId { get; set; }
         // 员工 部门 
-        public Department Department { get; set; }
+        public int? DepartmentId { get; set; }
     }
 }

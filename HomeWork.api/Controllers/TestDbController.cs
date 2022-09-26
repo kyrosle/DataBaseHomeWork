@@ -10,13 +10,13 @@ namespace HomeWork.api.Controllers
 {
     [ApiController]
     [Route("api/[Controller]/[action]")]
-    public class HomeController : ControllerBase
+    public class TestDbController : ControllerBase
     {
         private readonly MyDbContext db;
         private readonly IDapperService dapper;
         private readonly IServiceProvider provider;
 
-        public HomeController(MyDbContext db, IDapperService dapper, IServiceProvider provider)
+        public TestDbController(MyDbContext db, IDapperService dapper, IServiceProvider provider)
         {
             this.db = db;
             this.dapper = dapper;

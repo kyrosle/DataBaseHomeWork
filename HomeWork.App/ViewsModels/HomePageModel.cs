@@ -8,12 +8,9 @@ namespace HomeWork.App.ViewsModels
 {
     internal class HomePageModel : BindableBase
     {
-        private string welcome = "HHHHHH";
-
-        public string Welcome
+        public HomePageModel()
         {
-            get { return welcome; }
-            set { welcome = value; }
+            Title = "Home Page";
         }
     }
 }

@@ -18,8 +18,8 @@ namespace HomeWork.api.Dtos
         public string? Health { get; set; }
 
         // 员工 岗位 
-        public string Post { get; set; }
+        public PostDto Post { get; set; }
         // 员工 部门 
-        public string Department { get; set; }
+        public DepartmentDto Department { get; set; }
     }
 }

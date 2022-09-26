@@ -10,6 +10,7 @@ namespace HomeWork.App.ViewsModels
 {
     internal class BindableBase : INotifyPropertyChanged
     {
+        public string Title { get; init; }
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string name = "") =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

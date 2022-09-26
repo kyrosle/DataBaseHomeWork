@@ -2,6 +2,7 @@
 {
     public class DepartmentDto : IdentityDto
     {
-        public StaffDto Manager { get; set; }
+        public int MangerId { get; set; }
+        public string MangerName { get; set; }
     }
 }

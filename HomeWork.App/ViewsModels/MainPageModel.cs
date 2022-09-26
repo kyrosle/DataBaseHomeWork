@@ -28,6 +28,7 @@ namespace HomeWork.App.ViewsModels
 
         public MainPageModel()
         {
+            Title = "Main Page";
             OnCounterClicked = new Command(execute: () =>
             {
                 count++;

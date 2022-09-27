@@ -17,9 +17,19 @@ namespace HomeWork.Api.Service
             this.db = db;
             this.mapper = mapper;
         }
-        public Task<ApiResponse> AddAsync(StaffDto model)
+        public async Task<ApiResponse> AddAsync(StaffDto model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var staff = mapper.Map<Staff>(model);
+                await db.Staffs.AddAsync(staff);
+                await db.SaveChangesAsync();
+                return new ApiResponse(true, "Staff Added");
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse(e.Message);
+            }
         }
 
         public Task<ApiResponse> DeleteAsync(int id)
@@ -36,7 +46,7 @@ namespace HomeWork.Api.Service
                 IQueryable<Staff> staffsQuery = db.Staffs
                     .Skip(parameter.PageIndex * parameter.PageSize)
                     .Take(parameter.PageSize)
-                    .Where(st => !string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search));
+                    .Where(st => string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search));
                 var staffModels = await staffsQuery.ToArrayAsync();
                 var staffs = staffModels.Select(stm => mapper.Map<StaffDto>(stm)).ToArray();
                 return new ApiResponse(true, staffs);

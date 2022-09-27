@@ -12,7 +12,7 @@ namespace HomeWork.Share.Dtos
         public DateTime Brith { get; set; }
 
         // 员工 政治面貌
-        public Political PoliticalType { get; set; }
+        public string PoliticalType { get; set; }
 
         // 员工 健康情况
         public string? Health { get; set; }

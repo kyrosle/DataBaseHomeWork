@@ -15,7 +15,9 @@
             Title="Home"
             ContentTemplate="{DataTemplate local:Views.HomePage}"
             Route="HomePage" />
+        <ShellContent
+            Title="Staff"
+            ContentTemplate="{DataTemplate local:Views.StaffsPage}"
+            Route="StaffsPage" />
     </FlyoutItem>
-
-
 </Shell>

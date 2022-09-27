@@ -63,8 +63,11 @@
 	  </Compile>
 	</ItemGroup>
 
-	<ItemGroup>
+  <ItemGroup>
 	  <MauiXaml Update="Views\HomePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\StaffsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,34 +10,31 @@ namespace HomeWork.App.ViewsModels
 {
     internal class MainPageModel : BindableBase
     {
-        private int count;
-
-        public int Count
+        public ObservableCollection<ShowBar> ShowBars
         {
-            get { return count; }
-            set { count = value; OnPropertyChanged(); }
+            get { return showBars; }
+            set { showBars = value; OnPropertyChanged(); }
         }
-        private string countText;
-
-        public string CountText
-        {
-            get { return countText; }
-            set { countText = value; OnPropertyChanged(); }
-        }
-
-        public ICommand OnCounterClicked { get; private set; }
-
+        ObservableCollection<ShowBar> showBars;
         public MainPageModel()
         {
-            Title = "Main Page";
-            OnCounterClicked = new Command(execute: () =>
-            {
-                count++;
-                if (count == 1)
-                    CountText = $"Clicked {count} time";
-                else
-                    CountText = $"Clicked {count} times";
-            }, canExecute: () => { return true; });
+            InitShowBars();
         }
+        void InitShowBars()
+        {
+            showBars = new()
+            {
+                new ShowBar() { Name = "HHH" },
+                new ShowBar() { Name = "HHH" },
+                new ShowBar() { Name = "HHH" },
+                new ShowBar() { Name = "HHH" },
+                new ShowBar() { Name = "HHH" }
+            };
+        }
+    }
+
+    public class ShowBar
+    {
+        public string Name { get; set; }
     }
 }

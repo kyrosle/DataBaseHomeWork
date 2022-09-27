@@ -32,9 +32,25 @@ namespace HomeWork.Api.Service
             }
         }
 
-        public Task<ApiResponse> DeleteAsync(int id)
+        public async Task<ApiResponse> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var staffquery = db.Staffs.Where(st => st.Id.Equals(id));
+                var result = await staffquery.ToArrayAsync();
+                if(result is null)
+                {
+                    return new ApiResponse("Id not existed");
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse(e.Message);
+            }
         }
 
         public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)

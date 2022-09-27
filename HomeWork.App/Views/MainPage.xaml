@@ -10,11 +10,23 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
         </Grid.RowDefinitions>
 
-        <Grid />
+        <Label Text="Show" HorizontalTextAlignment="Center" FontSize="14"/>
+
+        <ListView ItemsSource="{Binding ShowBars}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <HorizontalStackLayout>
+                        <Label Text="{Binding Name}" FontSize="15"/>
+                        <BoxView Color="Azure"/>
+                    </HorizontalStackLayout>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
     </Grid>
 </ContentPage>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace HomeWork.App.ViewsModels
 {
-    internal class BindableBase : INotifyPropertyChanged
+    public class BindableBase : INotifyPropertyChanged
     {
         public string Title { get; init; }
         public event PropertyChangedEventHandler PropertyChanged;

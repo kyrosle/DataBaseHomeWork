@@ -2,10 +2,9 @@
 using HomeWork.api.Models;
 using HomeWork.Share.Dtos;
 using HomeWork.Share.Parmeters;
+using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Runtime.Intrinsics.Arm;
 
 namespace HomeWork.Api.Service
 {
@@ -71,15 +70,25 @@ namespace HomeWork.Api.Service
                 //    .Skip(parameter.PageIndex * parameter.PageSize)
                 //    .Take(parameter.PageSize)
                 //    .Where(st => string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search));
-                IQueryable<Staff> staffsQuery = from st in db.Staffs
-                                                join dp in db.Departments on st.DepartmentId equals dp.Id
-                                                join pt in db.Posts on st.PostId equals pt.Id
-                                                select new StaffDto()
-                                                {
-                                                };
-                var staffModels = await staffsQuery.ToArrayAsync();
+                IQueryable<StaffDto> staffDtos = from st in db.Staffs
+                                                 join dp in db.Departments on st.DepartmentId equals dp.Id
+                                                 join pt in db.Posts on st.PostId equals pt.Id
+                                                 join pol in db.Politicals on st.PoliticalType equals pol.Id
+                                                 select new StaffDto()
+                                                 {
+                                                     Id = st.Id,
+                                                     Name = st.Name,
+                                                     Brith = st.Brith,
+                                                     PoliticalType = pol.EnumType,
+                                                     DepartmentId = st.DepartmentId,
+                                                     DepartmentName = dp.Name,
+                                                     PostId = st.PostId,
+                                                     PostName = pt.Name,
+                                                 };
+                var staffModels = await staffDtos.ToArrayAsync();
+                // need contain post or department infomation
                 //var staffs = staffModels.Select(stm => mapper.Map<StaffDto>(stm)).ToArray();
-                return new ApiResponse(true, staffs);
+                return new ApiResponse(true, staffDtos);
             }
             catch (Exception e)
             {

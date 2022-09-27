@@ -1,42 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace HomeWork.App.ViewsModels
 {
-    internal class MainPageModel : BindableBase
+    public partial class MainPageModel : Base
     {
-        private int count;
-
-        public int Count
-        {
-            get { return count; }
-            set { count = value; OnPropertyChanged(); }
-        }
-        private string countText;
-
-        public string CountText
-        {
-            get { return countText; }
-            set { countText = value; OnPropertyChanged(); }
-        }
-
-        public ICommand OnCounterClicked { get; private set; }
-
+        private ObservableCollection<ShowBar> showBars;
         public MainPageModel()
         {
-            Title = "Main Page";
-            OnCounterClicked = new Command(execute: () =>
+            InitShowBars();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void InitShowBars()
+        {
+            ShowBars = new ObservableCollection<ShowBar>()
             {
-                count++;
-                if (count == 1)
-                    CountText = $"Clicked {count} time";
-                else
-                    CountText = $"Clicked {count} times";
-            }, canExecute: () => { return true; });
+                new ShowBar() {Name="HHH"},
+                new ShowBar() {Name="HHH"},
+                new ShowBar() {Name="HHH"},
+                new ShowBar() {Name="HHH"},
+            };
         }
     }
+    public class ShowBar
+    {
+        public string Name { get; set; }
+    }
+
 }

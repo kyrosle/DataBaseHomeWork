@@ -35,6 +35,9 @@ builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 builder.Services.AddTransient<IStaffServiece, StaffService>();
 builder.Services.AddTransient<IPostService, PostService>();
+builder.Services.AddTransient<IDepartmentService, DepartmentService>();
+builder.Services.AddTransient<IStaffChangeService, StaffChangeService>();
+builder.Services.AddTransient<IAttendanceService, AttendanceService>();
 
 
 var app = builder.Build();

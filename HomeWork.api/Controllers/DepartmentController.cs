@@ -20,7 +20,7 @@ namespace HomeWork.Api.Controllers
         public async Task<ApiResponse> Get(int id) => await service.GetSingleAsync(id);
 
         [HttpGet]
-        public async Task<ApiResponse> GetAllStaff([FromQuery] QueryParameter parameter) => await service.GetAllAsync(parameter);
+        public async Task<ApiResponse> GetAllDepartment([FromQuery] QueryParameter parameter) => await service.GetAllAsync(parameter);
 
         [HttpPost]
         public async Task<ApiResponse> Add([FromBody] DepartmentDto department) => await service.AddAsync(department);

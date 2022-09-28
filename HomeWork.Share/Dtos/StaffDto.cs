@@ -1,6 +1,4 @@
-﻿using HomeWork.Share.Dtos.Datadictionary;
-
-namespace HomeWork.Share.Dtos
+﻿namespace HomeWork.Share.Dtos
 {
     public class StaffDto : IdentityDto
     {

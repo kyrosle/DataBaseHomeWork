@@ -1,6 +1,7 @@
 ﻿using HomeWork.api.Context;
 using HomeWork.api.Models;
 using HomeWork.Share.Dtos;
+using HomeWork.Share.Parameters;
 using HomeWork.Share.Parmeters;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ namespace HomeWork.Api.Service
             this.db = db;
             this.mapper = mapper;
         }
+
         public async Task<ApiResponse> AddAsync(StaffChangeDto model)
         {
             try
@@ -38,16 +40,9 @@ namespace HomeWork.Api.Service
             try
             {
                 var staffChange = await db.StaffChanges.SingleAsync(stc => stc.Id.Equals(id));
-                if (staffChange is null)
-                {
-                    return new ApiResponse("Id not Found");
-                }
-                else
-                {
-                    db.StaffChanges.Remove(staffChange);
-                    var result = await db.SaveChangesAsync();
-                    return new ApiResponse(true, $"Delete {result} Records");
-                }
+                db.StaffChanges.Remove(staffChange);
+                var result = await db.SaveChangesAsync();
+                return new ApiResponse(true, $"Delete {result} Records");
             }
             catch (Exception e)
             {
@@ -60,26 +55,83 @@ namespace HomeWork.Api.Service
             try
             {
                 if (parameter.PageSize == 0) parameter.PageSize = 20;
-                IQueryable<AttendanceDto> addendanceDtosQuery = from ad in db.Attendances
-                                                                join ads in db.AttendanceStatuses
-                                                                    on ad.AttendanceStatusId equals ads.Id
-                                                                join st in db.Staffs
-                                                                    on ad.StaffId equals st.Id
-                                                                select new AttendanceDto()
-                                                                {
-                                                                    StaffId = st.Id,
-                                                                    StaffName = st.Name,
-                                                                    AttendanceType = ads.Id,
-                                                                    AttendanceStatus = ads.EnumType,
-                                                                    FineOrBouns = ads.FineOrBouns,
-                                                                    RateFineOrBouns = ads.RateFineOrBouns,
-                                                                    RecordTime = ad.RecordTime,
-                                                                    CountTime = ad.CountTime,
-                                                                };
-                var addendanceDtosQuerySplitedPage = addendanceDtosQuery
-                    .Skip(parameter.PageIndex * parameter.PageSize).Take(parameter.PageSize);
-                var attendancesDtos = await addendanceDtosQuerySplitedPage.ToArrayAsync();
-                return new ApiResponse(true, attendancesDtos);
+
+                IQueryable<StaffChangeDto> staffChangeDtosQuery = from stc in db.StaffChanges
+                                                                  join dp in db.Departments on stc.DepartmentId equals dp.Id
+                                                                  join st in db.Staffs on stc.StaffId equals st.Id
+                                                                  select new StaffChangeDto()
+                                                                  {
+                                                                      Id = stc.Id,
+                                                                      StaffId = stc.StaffId,
+                                                                      StaffName = st.Name,
+                                                                      DepartmentId = stc.DepartmentId,
+                                                                      DepartmentName = dp.Name,
+                                                                      ChangeTime = stc.ChangeTime
+                                                                  };
+
+                staffChangeDtosQuery = staffChangeDtosQuery
+                .Skip(parameter.PageIndex * parameter.PageSize)
+                .Take(parameter.PageSize);
+
+                var staffChangeDtos = await staffChangeDtosQuery.ToArrayAsync();
+
+                return new ApiResponse(true, staffChangeDtos);
+            }
+            catch (Exception e)
+            {
+                return new ApiResponse(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// 带筛选条件查询
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public async Task<ApiResponse> GetAllAsync(StaffChangeParameter parameter)
+        {
+            try
+            {
+                if (parameter.PageSize == 0) parameter.PageSize = 20;
+
+                IQueryable<StaffChangeDto> staffChangeDtosQuery = from stc in db.StaffChanges
+                                                                  join dp in db.Departments on stc.DepartmentId equals dp.Id
+                                                                  join st in db.Staffs on stc.StaffId equals st.Id
+                                                                  select new StaffChangeDto()
+                                                                  {
+                                                                      Id = stc.Id,
+                                                                      StaffId = stc.StaffId,
+                                                                      StaffName = st.Name,
+                                                                      DepartmentId = stc.DepartmentId,
+                                                                      DepartmentName = dp.Name,
+                                                                      ChangeTime = stc.ChangeTime
+                                                                  };
+
+                if (parameter.SelectStaffs.HasValue && (int)(parameter.SelectStaffs) > 0)
+                {
+                    staffChangeDtosQuery = staffChangeDtosQuery.Where(stc => stc.StaffId.Equals(parameter.SelectStaffs));
+                }
+                else if (parameter.SelectDepartment.HasValue && (int)(parameter.SelectDepartment) > 0)
+                {
+                    staffChangeDtosQuery = staffChangeDtosQuery.Where(stc => stc.DepartmentId.Equals(parameter.SelectDepartment));
+                }
+
+                if (parameter.IsDescending.HasValue && (bool)(parameter.IsDescending))
+                {
+                    staffChangeDtosQuery = staffChangeDtosQuery.OrderByDescending(stc => stc.ChangeTime);
+                }
+                else
+                {
+                    staffChangeDtosQuery = staffChangeDtosQuery.OrderBy(stc => stc.ChangeTime);
+                }
+
+                staffChangeDtosQuery = staffChangeDtosQuery
+                    .Skip(parameter.PageIndex * parameter.PageSize)
+                    .Take(parameter.PageSize);
+
+                var staffChangeDtos = await staffChangeDtosQuery.ToArrayAsync();
+
+                return new ApiResponse(true, staffChangeDtos);
             }
             catch (Exception e)
             {
@@ -91,17 +143,8 @@ namespace HomeWork.Api.Service
         {
             try
             {
-                var staffChange = await db.StaffChanges
-                    .OrderByDescending(stc => stc.ChangeTime)
-                    .FirstAsync(stc => stc.StaffId.Equals(id));
-                if (staffChange is not null)
-                {
-                    return new ApiResponse(true, staffChange);
-                }
-                else
-                {
-                    return new ApiResponse("Id not Found");
-                }
+                var staffChange = await db.StaffChanges.SingleAsync(stc => stc.Id.Equals(id));
+                return new ApiResponse(true, staffChange);
             }
             catch (Exception e)
             {
@@ -109,12 +152,12 @@ namespace HomeWork.Api.Service
             }
         }
 
-        public async Task<ApiResponse> UpdateAsync(AttendanceDto model)
+        public async Task<ApiResponse> UpdateAsync(StaffChangeDto model)
         {
             try
             {
-                var attendance = mapper.Map<Attendance>(model);
-                db.Attendances.Update(attendance);
+                var staffChange = mapper.Map<StaffChange>(model);
+                db.StaffChanges.Update(staffChange);
                 var result = await db.SaveChangesAsync();
                 return new ApiResponse(true, $"Updated {result} record(s)");
             }

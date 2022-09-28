@@ -18,17 +18,24 @@ namespace HomeWork.Api.Service
             this.db = db;
             this.mapper = mapper;
         }
+        /// <summary>
+        /// 添加一个Staff
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> AddAsync(StaffDto model)
         {
             try
             {
-                bool isExist = db.Staffs.AsNoTracking().Where(st => st.Name.Trim().Equals(model.Name)).Any();
+                // check staff whether is Existed
+                bool isExist = await db.Staffs.AsNoTracking().AnyAsync(st => st.Name.Trim().Equals(model.Name));
                 if (isExist)
                 {
                     return new ApiResponse("Staff is Existed");
                 }
-
+                // map staffDto -> staffModel
                 var staff = mapper.Map<Staff>(model);
+                // add staff to ef db
                 await db.Staffs.AddAsync(staff);
                 await db.SaveChangesAsync();
                 return new ApiResponse(true, "Staff Added");
@@ -38,29 +45,32 @@ namespace HomeWork.Api.Service
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 删除 id Staff
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> DeleteAsync(int id)
         {
             try
             {
+                // select single staff model
                 var staff = await db.Staffs.SingleAsync(st => st.Id.Equals(id));
-                if (staff is null)
-                {
-                    return new ApiResponse("Id not Found");
-                }
-                else
-                {
-                    db.Staffs.Remove(staff);
-                    var result = await db.SaveChangesAsync();
-                    return new ApiResponse(true, $"Delete {result} Records");
-                }
+                // if not staff id is matched the param-id then will throw a expection nothing in seq
+                db.Staffs.Remove(staff);
+                var result = await db.SaveChangesAsync();
+                return new ApiResponse(true, $"Delete {result} Records");
             }
             catch (Exception e)
             {
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 获取所有Staff
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
             try
@@ -75,7 +85,7 @@ namespace HomeWork.Api.Service
                                                         on st.DepartmentId equals dp.Id
                                                       join pt in db.Posts
                                                         on st.PostId equals pt.Id
-                                                      join pol in db.Politicals 
+                                                      join pol in db.Politicals
                                                         on st.PoliticalType equals pol.Id
                                                       select new StaffDto()
                                                       {
@@ -89,6 +99,8 @@ namespace HomeWork.Api.Service
                                                           PostName = pt.Name,
                                                       };
                 var staffDtosSplitedPage = staffDtosQuery
+                    .AsNoTracking()
+                    .Where(st => string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search))
                     .Skip(parameter.PageIndex * parameter.PageSize).Take(parameter.PageSize);
                 var staffDtos = await staffDtosSplitedPage.ToArrayAsync();
                 // need contain post or department infomation
@@ -100,27 +112,30 @@ namespace HomeWork.Api.Service
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 获取某一id 的 Staff
+        /// </summary>
+        /// <param name="id">Staff Id</param>
+        /// <returns></returns>
         public async Task<ApiResponse> GetSingleAsync(int id)
         {
             try
             {
                 var staff = await db.Staffs.SingleAsync(st => st.Id.Equals(id));
-                if (staff is not null)
-                {
-                    return new ApiResponse(true, staff);
-                }
-                else
-                {
-                    return new ApiResponse("Id not Found");
-                }
+                // staff 为空 throw Expection
+                var staffDto = mapper.Map<StaffDto>(staff);
+                return new ApiResponse(true, staffDto);
             }
             catch (Exception e)
             {
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 更新Staff数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> UpdateAsync(StaffDto model)
         {
             try

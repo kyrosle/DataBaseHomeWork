@@ -17,11 +17,16 @@ namespace HomeWork.Api.Service
             this.db = db;
             this.mapper = mapper;
         }
+        /// <summary>
+        /// 添加 Department
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> AddAsync(DepartmentDto model)
         {
             try
             {
-                bool isExist = db.Departments.AsNoTracking().Where(dp => dp.Name.Trim().Equals(model.Name)).Any();
+                bool isExist = await db.Departments.AsNoTracking().AnyAsync(dp => dp.Name.Trim().Equals(model.Name));
                 if (isExist)
                 {
                     return new ApiResponse("Department is Existed");
@@ -38,21 +43,19 @@ namespace HomeWork.Api.Service
             }
         }
 
+        /// <summary>
+        /// 删除 id 的 department
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> DeleteAsync(int id)
         {
             try
             {
                 var department = await db.Departments.SingleAsync(dp => dp.Id.Equals(id));
-                if (department is null)
-                {
-                    return new ApiResponse("Id not Found");
-                }
-                else
-                {
-                    db.Departments.Remove(department);
-                    var result = await db.SaveChangesAsync();
-                    return new ApiResponse(true, $"Delete {result} Records");
-                }
+                db.Departments.Remove(department);
+                var result = await db.SaveChangesAsync();
+                return new ApiResponse(true, $"Delete {result} Records");
             }
             catch (Exception e)
             {
@@ -60,24 +63,31 @@ namespace HomeWork.Api.Service
             }
         }
 
+        /// <summary>
+        /// 获取 所有 Departement 信息
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
             try
             {
                 if (parameter.PageSize == 0) parameter.PageSize = 20;
-                IQueryable<DepartmentDto> departmentQuery = from dp in db.Departments
-                                                            join st in db.Staffs on dp.ManagerId equals st.Id
-                                                            select new DepartmentDto()
-                                                            {
-                                                                Id = dp.Id,
-                                                                Name = dp.Name,
-                                                                ManagerId = st.Id,
-                                                                ManagerName = st.Name
-                                                            };
-                var departments = await departmentQuery.ToArrayAsync();
-                // need contain post or department infomation
-                //var posts = departmentModels.Select(dp => mapper.Map<De>(pt)).ToArray();
-                return new ApiResponse(true, departments);
+                IQueryable<DepartmentDto> departmentDtosQuery = from dp in db.Departments
+                                                                join st in db.Staffs on dp.ManagerId equals st.Id
+                                                                select new DepartmentDto()
+                                                                {
+                                                                    Id = dp.Id,
+                                                                    Name = dp.Name,
+                                                                    ManagerId = st.Id,
+                                                                    ManagerName = st.Name
+                                                                };
+                var departmentDtosSplitedPage = departmentDtosQuery
+                    .Skip(parameter.PageIndex * parameter.PageSize)
+                    .Take(parameter.PageSize)
+                    .Where(dp => string.IsNullOrWhiteSpace(parameter.Search) || dp.Name.Trim().Contains(parameter.Search));
+                var departmentDtos = await departmentDtosSplitedPage.ToArrayAsync();
+                return new ApiResponse(true, departmentDtos);
             }
             catch (Exception e)
             {
@@ -85,19 +95,18 @@ namespace HomeWork.Api.Service
             }
         }
 
+        /// <summary>
+        /// 获取 id 的 Department
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> GetSingleAsync(int id)
         {
             try
             {
-                var post = await db.Posts.SingleAsync(pt => pt.Id.Equals(id));
-                if (post is not null)
-                {
-                    return new ApiResponse(true, post);
-                }
-                else
-                {
-                    return new ApiResponse("Id not Found");
-                }
+                var department = await db.Posts.SingleAsync(dp => dp.Id.Equals(id));
+                var departmentDto = mapper.Map<DepartmentDto>(department);
+                return new ApiResponse(true, departmentDto);
             }
             catch (Exception e)
             {
@@ -105,12 +114,17 @@ namespace HomeWork.Api.Service
             }
         }
 
+        /// <summary>
+        /// 更新 id 的 Department 信息
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> UpdateAsync(DepartmentDto model)
         {
             try
             {
-                var post = mapper.Map<Post>(model);
-                db.Posts.Update(post);
+                var department = mapper.Map<Department>(model);
+                db.Departments.Update(department);
                 var result = await db.SaveChangesAsync();
                 return new ApiResponse(true, $"Updated {result} record(s)");
             }

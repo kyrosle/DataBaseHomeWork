@@ -9,11 +9,34 @@ namespace HomeWork.Api.Extensions
         public void Register(TypeAdapterConfig config)
         {
             config.NewConfig<StaffDto, Staff>()
-                .Map(std => std.Id, st => st.Id)
-                .Map(std => std.Name, st => st.Name)
-                .Map(std => std.Brith, st => st.Brith)
-                .Map(std => std.DepartmentId, st => st.DepartmentId)
-                .Map(std => std.PostId, st => st.PostId);
+                .Map(st => st.Id, std => std.Id)
+                .Map(st => st.Name, std => std.Name)
+                .Map(st => st.Brith, std => std.Brith)
+                .Map(st => st.DepartmentId, sdt => sdt.DepartmentId)
+                .Map(st => st.PostId, sdt => sdt.PostId);
+
+            config.NewConfig<PostDto, Post>()
+                .Map(pt => pt.Id, ptd => ptd.Id)
+                .Map(pt => pt.Name, ptd => ptd.Name)
+                .Map(pt => pt.SaralyId, ptd => ptd.SaralyId);
+
+            config.NewConfig<DepartmentDto, Department>()
+                .Map(dp => dp.Id, dpd => dpd.Id)
+                .Map(dp => dp.Name, dpd => dpd.Name)
+                .Map(dp => dp.ManagerId, dpd => dpd.ManagerId);
+
+            config.NewConfig<AttendanceDto, Attendance>()
+                .Map(at => at.Id, atd => atd.Id)
+                .Map(at => at.StaffId, atd => atd.StaffId)
+                .Map(at => at.AttendanceStatusId, atd => atd.AttendanceStatus)
+                .Map(at => at.CountTime, atd => atd.CountTime)
+                .Map(at => at.RecordTime, atd => atd.RecordTime);
+
+            config.NewConfig<StaffChangeDto, StaffChange>()
+                .Map(stc => stc.Id, stcd => stcd.Id)
+                .Map(stc => stc.StaffId, stcd => stcd.StaffId)
+                .Map(stc => stc.DepartmentId, stcd => stcd.DepartmentId)
+                .Map(stc => stc.ChangeTime, stcd => stcd.ChangeTime);
         }
     }
 }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeWork.Api.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20220926060354_init")]
+    [Migration("20220928091223_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,23 +25,30 @@ namespace HomeWork.Api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("attendance_id");
 
                     b.Property<int>("AttendanceStatusId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("attendance_attendance_status_id");
 
                     b.Property<float>("CountTime")
                         .HasColumnType("float")
-                        .HasColumnName("count_time");
+                        .HasColumnName("attendance_count_time");
 
                     b.Property<DateTime>("RecordTime")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("record_time");
+                        .HasColumnName("attendance_record_time");
 
                     b.Property<int>("StaffId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("attendance_staff_id");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AttendanceStatusId");
+
+                    b.HasIndex("StaffId");
 
                     b.ToTable("T_Attendance", (string)null);
                 });
@@ -167,7 +174,7 @@ namespace HomeWork.Api.Migrations
 
                     b.Property<int>("SaralyId")
                         .HasColumnType("int")
-                        .HasColumnName("staff_salary_id");
+                        .HasColumnName("post_staff_salary_id");
 
                     b.HasKey("Id");
 
@@ -185,7 +192,7 @@ namespace HomeWork.Api.Migrations
 
                     b.Property<DateTime>("Brith")
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("staff_brithdate");
+                        .HasColumnName("staff_brith");
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int")
@@ -201,7 +208,8 @@ namespace HomeWork.Api.Migrations
                         .HasColumnName("staff_name");
 
                     b.Property<int>("PoliticalType")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("staff_political_type");
 
                     b.Property<int?>("PostId")
                         .HasColumnType("int")
@@ -220,30 +228,27 @@ namespace HomeWork.Api.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("staffchange_id");
 
                     b.Property<DateTime>("ChangeTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("change_time");
+                        .HasColumnName("staffchange_change_time");
 
                     b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("staffchange_department_id");
 
                     b.Property<int>("StaffId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("department_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("staff_id")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("staffchange_staff_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("department_id");
+                    b.HasIndex("DepartmentId");
 
-                    b.HasIndex("staff_id");
+                    b.HasIndex("StaffId");
 
                     b.ToTable("T_StaffChange", (string)null);
                 });
@@ -262,6 +267,21 @@ namespace HomeWork.Api.Migrations
                     b.HasKey("SalaryId");
 
                     b.ToTable("T_StaffSalary", (string)null);
+                });
+
+            modelBuilder.Entity("HomeWork.api.Models.Attendance", b =>
+                {
+                    b.HasOne("HomeWork.api.Models.AttendanceStatus", null)
+                        .WithMany()
+                        .HasForeignKey("AttendanceStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HomeWork.api.Models.Staff", null)
+                        .WithMany()
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.Department", b =>
@@ -295,13 +315,13 @@ namespace HomeWork.Api.Migrations
                 {
                     b.HasOne("HomeWork.api.Models.Department", null)
                         .WithMany()
-                        .HasForeignKey("department_id")
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HomeWork.api.Models.Staff", null)
                         .WithMany()
-                        .HasForeignKey("staff_id")
+                        .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

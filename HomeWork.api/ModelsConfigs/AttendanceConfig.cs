@@ -9,10 +9,14 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Attendance> builder)
         {
             builder.ToTable("T_Attendance");
+            builder.Property(at => at.Id).HasColumnName("attendance_id");
+            builder.Property(at => at.RecordTime).HasColumnName("attendance_record_time");
+            builder.Property(at => at.CountTime).HasColumnName("attendance_count_time");
+            builder.Property(at => at.AttendanceStatusId).HasColumnName("attendance_attendance_status_id");
+            builder.Property(at => at.StaffId).HasColumnName("attendance_staff_id");
 
-            builder.Property(e => e.RecordTime).HasColumnName("record_time");
-            builder.Property(e => e.CountTime).HasColumnName("count_time");
-
+            builder.HasOne<Staff>().WithMany().HasForeignKey(at => at.StaffId);
+            builder.HasOne<AttendanceStatus>().WithMany().HasForeignKey(at => at.AttendanceStatusId);
         }
     }
 }

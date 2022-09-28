@@ -17,11 +17,16 @@ namespace HomeWork.Api.Service
             this.db = db;
             this.mapper = mapper;
         }
+        /// <summary>
+        /// 添加一个Post
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> AddAsync(PostDto model)
         {
             try
             {
-                bool isExist = db.Posts.AsNoTracking().Where(st => st.Name.Trim().Equals(model.Name)).Any();
+                bool isExist = await db.Posts.AsNoTracking().AnyAsync(st => st.Name.Trim().Equals(model.Name));
                 if (isExist)
                 {
                     return new ApiResponse("Staff is Existed");
@@ -37,7 +42,11 @@ namespace HomeWork.Api.Service
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 删除一个Post
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> DeleteAsync(int id)
         {
             try
@@ -59,7 +68,11 @@ namespace HomeWork.Api.Service
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 获取所有的 Post
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
             try
@@ -72,10 +85,14 @@ namespace HomeWork.Api.Service
                                                     {
                                                         Id = pt.Id,
                                                         Name = pt.Name,
+                                                        SaralyId = pt.SaralyId,
                                                         Saraly = sl.Salary
                                                     };
                 var postDtosQuerySplitedPage = postDtosQuery
-                    .Skip(parameter.PageIndex * parameter.PageSize).Take(parameter.PageSize);
+                    .AsNoTracking()
+                    .Where(pt => string.IsNullOrWhiteSpace(parameter.Search) || pt.Name.Trim().Contains(parameter.Search))
+                    .Skip(parameter.PageIndex * parameter.PageSize)
+                    .Take(parameter.PageSize);
                 var postDtos = await postDtosQuerySplitedPage.ToArrayAsync();
                 return new ApiResponse(true, postDtos);
             }
@@ -84,27 +101,29 @@ namespace HomeWork.Api.Service
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 根据 id 查询 Post
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> GetSingleAsync(int id)
         {
             try
             {
                 var post = await db.Posts.SingleAsync(pt => pt.Id.Equals(id));
-                if (post is not null)
-                {
-                    return new ApiResponse(true, post);
-                }
-                else
-                {
-                    return new ApiResponse("Id not Found");
-                }
+                var postDto = mapper.Map<PostDto>(post);
+                return new ApiResponse(true, postDto);
             }
             catch (Exception e)
             {
                 return new ApiResponse(e.Message);
             }
         }
-
+        /// <summary>
+        /// 更新 Post 数据
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<ApiResponse> UpdateAsync(PostDto model)
         {
             try

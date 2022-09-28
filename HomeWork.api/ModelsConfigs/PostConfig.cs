@@ -9,10 +9,11 @@ namespace HomeWork.api.ModelsConfigs
         public void Configure(EntityTypeBuilder<Post> builder)
         {
             builder.ToTable("T_Post");
-            builder.Property(e => e.Id).HasColumnName("post_id");
-            builder.Property(e => e.Name).HasColumnName("post_name");
-            builder.Property(e => e.SaralyId).HasColumnName("staff_salary_id");
-            builder.HasOne<StaffSalary>().WithMany().HasForeignKey(e=>e.SaralyId);
+            builder.Property(pt => pt.Id).HasColumnName("post_id");
+            builder.Property(pt => pt.Name).HasColumnName("post_name");
+            builder.Property(pt => pt.SaralyId).HasColumnName("post_staff_salary_id");
+
+            builder.HasOne<StaffSalary>().WithMany().HasForeignKey(pt => pt.SaralyId);
         }
     }
 }

@@ -2,12 +2,11 @@
 {
     public class StaffChangeDto
     {
-        // 变更 员工
-        public StaffDto Staff { get; set; }
-        // 变更 部门
-        public DepartmentDto Department { get; set; }
-
-        // 记录时间
+        public int Id { get; set; }
+        public int StaffId { get; set; }
+        public string StaffName { get; set; }
+        public int DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
         public DateTime ChangeTime { get; set; }
     }
 }

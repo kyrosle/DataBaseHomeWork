@@ -34,6 +34,7 @@ builder.Services.AddSingleton(config);
 builder.Services.AddScoped<IMapper, ServiceMapper>();
 
 builder.Services.AddTransient<IStaffServiece, StaffService>();
+builder.Services.AddTransient<IPostService, PostService>();
 
 
 var app = builder.Build();

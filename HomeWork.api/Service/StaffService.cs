@@ -70,22 +70,27 @@ namespace HomeWork.Api.Service
                 //    .Skip(parameter.PageIndex * parameter.PageSize)
                 //    .Take(parameter.PageSize)
                 //    .Where(st => string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search));
-                IQueryable<StaffDto> staffDtos = from st in db.Staffs
-                                                 join dp in db.Departments on st.DepartmentId equals dp.Id
-                                                 join pt in db.Posts on st.PostId equals pt.Id
-                                                 join pol in db.Politicals on st.PoliticalType equals pol.Id
-                                                 select new StaffDto()
-                                                 {
-                                                     Id = st.Id,
-                                                     Name = st.Name,
-                                                     Brith = st.Brith,
-                                                     PoliticalType = pol.EnumType,
-                                                     DepartmentId = st.DepartmentId,
-                                                     DepartmentName = dp.Name,
-                                                     PostId = st.PostId,
-                                                     PostName = pt.Name,
-                                                 };
-                var staffModels = await staffDtos.ToArrayAsync();
+                IQueryable<StaffDto> staffDtosQuery = from st in db.Staffs
+                                                      join dp in db.Departments
+                                                        on st.DepartmentId equals dp.Id
+                                                      join pt in db.Posts
+                                                        on st.PostId equals pt.Id
+                                                      join pol in db.Politicals 
+                                                        on st.PoliticalType equals pol.Id
+                                                      select new StaffDto()
+                                                      {
+                                                          Id = st.Id,
+                                                          Name = st.Name,
+                                                          Brith = st.Brith,
+                                                          PoliticalType = pol.EnumType,
+                                                          DepartmentId = st.DepartmentId,
+                                                          DepartmentName = dp.Name,
+                                                          PostId = st.PostId,
+                                                          PostName = pt.Name,
+                                                      };
+                var staffDtosSplitedPage = staffDtosQuery
+                    .Skip(parameter.PageIndex * parameter.PageSize).Take(parameter.PageSize);
+                var staffDtos = await staffDtosSplitedPage.ToArrayAsync();
                 // need contain post or department infomation
                 //var staffs = staffModels.Select(stm => mapper.Map<StaffDto>(stm)).ToArray();
                 return new ApiResponse(true, staffDtos);

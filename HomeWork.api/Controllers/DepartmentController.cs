@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace HomeWork.Api.Controllers
 {
     [ApiController]
-    [Route("api/[Controller]/[action]")]
-    public class StaffController : ControllerBase
+    [Route("ap/[controller]/[action]")]
+    public class DepartmentController : ControllerBase
     {
-        private readonly IStaffServiece service;
+        private readonly IDepartmentService service;
 
-        public StaffController(IStaffServiece service)
+        public DepartmentController(IDepartmentService service)
         {
             this.service = service;
         }
@@ -23,10 +23,10 @@ namespace HomeWork.Api.Controllers
         public async Task<ApiResponse> GetAllStaff([FromQuery] QueryParameter parameter) => await service.GetAllAsync(parameter);
 
         [HttpPost]
-        public async Task<ApiResponse> Add([FromBody] StaffDto staff) => await service.AddAsync(staff);
+        public async Task<ApiResponse> Add([FromBody] DepartmentDto department) => await service.AddAsync(department);
 
         [HttpPost]
-        public async Task<ApiResponse> Update([FromBody] StaffDto staff) => await service.UpdateAsync(staff);
+        public async Task<ApiResponse> Update([FromBody] DepartmentDto department) => await service.UpdateAsync(department);
 
         [HttpGet]
         public async Task<ApiResponse> Delete(int id) => await service.DeleteAsync(id);

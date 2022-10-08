@@ -93,8 +93,8 @@ namespace HomeWork.api.Controllers
             await db.SaveChangesAsync();
 
             // add two Manager staff salary
-            var saraly1 = new StaffSalary { Salary = 10000, BillingTime = DateTime.Now, StaffId = manager1.Id };
-            var saraly2 = new StaffSalary { Salary = 20000, BillingTime = DateTime.Now, StaffId = manager2.Id };
+            var saraly1 = new StaffSalary { Salary = 10000, StaffId = manager1.Id };
+            var saraly2 = new StaffSalary { Salary = 20000, StaffId = manager2.Id };
             await db.Salarys.AddRangeAsync(saraly1, saraly2);
             await db.SaveChangesAsync();
 
@@ -127,8 +127,8 @@ namespace HomeWork.api.Controllers
             await db.SaveChangesAsync();
 
             // add two Staff staff salary
-            var saraly3 = new StaffSalary { Salary = 10000, BillingTime = DateTime.Now, StaffId = staff1.Id };
-            var saraly4 = new StaffSalary { Salary = 20000, BillingTime = DateTime.Now, StaffId = staff2.Id };
+            var saraly3 = new StaffSalary { Salary = 10000, StaffId = staff1.Id };
+            var saraly4 = new StaffSalary { Salary = 20000, StaffId = staff2.Id };
             await db.Salarys.AddRangeAsync(saraly3, saraly4);
             await db.SaveChangesAsync();
 

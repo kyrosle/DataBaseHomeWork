@@ -1,4 +1,5 @@
 ﻿using HomeWork.api.Models;
+using HomeWork.Api.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeWork.api.Context
@@ -11,6 +12,7 @@ namespace HomeWork.api.Context
         public DbSet<Political> Politicals { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<StaffSalary> Salarys { get; set; }
+        public DbSet<SalaryRecord> SalaryRecords { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<StaffChange> StaffChanges { get; set; }
 

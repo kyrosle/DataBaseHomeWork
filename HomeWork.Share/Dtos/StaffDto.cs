@@ -21,5 +21,8 @@
         // 员工 部门 
         public int? DepartmentId { get; set; }
         public string? DepartmentName { get; set; }
+        public int? SalaryId { get; set; }
+        public float? Salary { get; set; }
+        public DateTime Introduce { get; set; }
     }
 }

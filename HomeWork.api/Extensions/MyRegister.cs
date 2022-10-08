@@ -13,12 +13,13 @@ namespace HomeWork.Api.Extensions
                 .Map(st => st.Name, std => std.Name)
                 .Map(st => st.Brith, std => std.Brith)
                 .Map(st => st.DepartmentId, sdt => sdt.DepartmentId)
-                .Map(st => st.PostId, sdt => sdt.PostId);
+                .Map(st => st.PostId, sdt => sdt.PostId)
+                .Map(st => st.SalaryId, std => std.SalaryId);
 
             config.NewConfig<PostDto, Post>()
                 .Map(pt => pt.Id, ptd => ptd.Id)
                 .Map(pt => pt.Name, ptd => ptd.Name)
-                .Map(pt => pt.SaralyId, ptd => ptd.SaralyId);
+                .Map(pt => pt.StandSalary, ptd => ptd.StandSalary);
 
             config.NewConfig<DepartmentDto, Department>()
                 .Map(dp => dp.Id, dpd => dpd.Id)

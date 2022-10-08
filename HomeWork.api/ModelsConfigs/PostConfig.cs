@@ -11,9 +11,7 @@ namespace HomeWork.api.ModelsConfigs
             builder.ToTable("T_Post");
             builder.Property(pt => pt.Id).HasColumnName("post_id");
             builder.Property(pt => pt.Name).HasColumnName("post_name");
-            builder.Property(pt => pt.SaralyId).HasColumnName("post_staff_salary_id");
-
-            builder.HasOne<StaffSalary>().WithMany().HasForeignKey(pt => pt.SaralyId);
+            builder.Property(pt => pt.StandSalary).HasColumnName("post_stand_salary");
         }
     }
 }

@@ -57,16 +57,9 @@ namespace HomeWork.api.Controllers
             var politicalType = db.Politicals.Where(e => true).ToArray();
             var attendanceType = db.AttendanceStatuses.Where(e => true).ToArray();
 
-            // add two Post staff salary
-            var saraly1 = new StaffSalary { Salary = 10000 };
-            var saraly2 = new StaffSalary { Salary = 20000 };
-
-            await db.Salarys.AddRangeAsync(saraly1, saraly2);
-            await db.SaveChangesAsync();
-
             // add two Post
-            var post1 = new Post { Name = "Post1", SaralyId = saraly1.SalaryId };
-            var post2 = new Post { Name = "Post2", SaralyId = saraly2.SalaryId };
+            var post1 = new Post { Name = "Post1", StandSalary = 10000 };
+            var post2 = new Post { Name = "Post2", StandSalary = 20000 };
 
             // add two department
             var department1 = new Department { Name = "Department1" };
@@ -95,9 +88,17 @@ namespace HomeWork.api.Controllers
                 Brith = DateTime.Now,
                 PoliticalType = politicalType[1].Id
             };
+
             await db.Staffs.AddRangeAsync(manager1, manager2);
             await db.SaveChangesAsync();
 
+            // add two Manager staff salary
+            var saraly1 = new StaffSalary { Salary = 10000, BillingTime = DateTime.Now, StaffId = manager1.Id };
+            var saraly2 = new StaffSalary { Salary = 20000, BillingTime = DateTime.Now, StaffId = manager2.Id };
+            await db.Salarys.AddRangeAsync(saraly1, saraly2);
+            await db.SaveChangesAsync();
+
+            // change department manager
             department1.ManagerId = manager1.Id;
             department2.ManagerId = manager2.Id;
             await db.SaveChangesAsync();
@@ -121,7 +122,14 @@ namespace HomeWork.api.Controllers
                 Brith = DateTime.Now,
                 PoliticalType = politicalType[1].Id
             };
+
             await db.Staffs.AddRangeAsync(staff1, staff2);
+            await db.SaveChangesAsync();
+
+            // add two Staff staff salary
+            var saraly3 = new StaffSalary { Salary = 10000, BillingTime = DateTime.Now, StaffId = staff1.Id };
+            var saraly4 = new StaffSalary { Salary = 20000, BillingTime = DateTime.Now, StaffId = staff2.Id };
+            await db.Salarys.AddRangeAsync(saraly3, saraly4);
             await db.SaveChangesAsync();
 
             // add a attendance record
@@ -144,7 +152,14 @@ namespace HomeWork.api.Controllers
             var staffs = from staff in db.Staffs
                          join post in db.Posts on staff.PostId equals post.Id
                          join department in db.Departments on staff.DepartmentId equals department.Id
-                         select new { StaffName = staff.Name, PostName = post.Name, DepartmentName = department.Name };
+                         join salary in db.Salarys on staff.SalaryId equals salary.Id
+                         select new
+                         {
+                             StaffName = staff.Name,
+                             PostName = post.Name,
+                             DepartmentName = department.Name,
+                             salary.Salary
+                         };
             return new ApiResponse(true, staffs);
         }
         [HttpGet]

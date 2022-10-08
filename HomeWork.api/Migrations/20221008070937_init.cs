@@ -46,38 +46,34 @@ namespace HomeWork.Api.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "T_StaffSalary",
-                columns: table => new
-                {
-                    salary_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    salary_value = table.Column<float>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_T_StaffSalary", x => x.salary_id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
                 name: "T_Post",
                 columns: table => new
                 {
                     post_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    post_staff_salary_id = table.Column<int>(type: "int", nullable: false),
+                    post_stand_salary = table.Column<float>(type: "float", nullable: false),
                     post_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_T_Post", x => x.post_id);
-                    table.ForeignKey(
-                        name: "FK_T_Post_T_StaffSalary_post_staff_salary_id",
-                        column: x => x.post_staff_salary_id,
-                        principalTable: "T_StaffSalary",
-                        principalColumn: "salary_id",
-                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "T_StaffSalary",
+                columns: table => new
+                {
+                    salary_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    salary_staff_id = table.Column<int>(type: "int", nullable: false),
+                    salary_value = table.Column<float>(type: "float", nullable: false),
+                    salary_billing_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_StaffSalary", x => x.salary_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -132,6 +128,9 @@ namespace HomeWork.Api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     staff_post_id = table.Column<int>(type: "int", nullable: true),
                     staff_department_id = table.Column<int>(type: "int", nullable: true),
+                    staff_salary_id = table.Column<int>(type: "int", nullable: true),
+                    staff_introduce = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     staff_name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
@@ -148,6 +147,11 @@ namespace HomeWork.Api.Migrations
                         column: x => x.staff_post_id,
                         principalTable: "T_Post",
                         principalColumn: "post_id");
+                    table.ForeignKey(
+                        name: "FK_T_Staff_T_StaffSalary_staff_salary_id",
+                        column: x => x.staff_salary_id,
+                        principalTable: "T_StaffSalary",
+                        principalColumn: "salary_id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -216,11 +220,6 @@ namespace HomeWork.Api.Migrations
                 column: "department_manager_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Post_post_staff_salary_id",
-                table: "T_Post",
-                column: "post_staff_salary_id");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_T_Staff_staff_department_id",
                 table: "T_Staff",
                 column: "staff_department_id");
@@ -229,6 +228,11 @@ namespace HomeWork.Api.Migrations
                 name: "IX_T_Staff_staff_post_id",
                 table: "T_Staff",
                 column: "staff_post_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_T_Staff_staff_salary_id",
+                table: "T_Staff",
+                column: "staff_salary_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_T_StaffChange_staffchange_department_id",

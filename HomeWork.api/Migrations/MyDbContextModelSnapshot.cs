@@ -170,13 +170,11 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("post_name");
 
-                    b.Property<int>("SaralyId")
-                        .HasColumnType("int")
-                        .HasColumnName("post_staff_salary_id");
+                    b.Property<float>("StandSalary")
+                        .HasColumnType("float")
+                        .HasColumnName("post_stand_salary");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SaralyId");
 
                     b.ToTable("T_Post", (string)null);
                 });
@@ -200,6 +198,10 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("staff_health");
 
+                    b.Property<string>("Introduce")
+                        .HasColumnType("longtext")
+                        .HasColumnName("staff_introduce");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -213,11 +215,17 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("staff_post_id");
 
+                    b.Property<int?>("SalaryId")
+                        .HasColumnType("int")
+                        .HasColumnName("staff_salary_id");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("SalaryId");
 
                     b.ToTable("T_Staff", (string)null);
                 });
@@ -253,16 +261,24 @@ namespace HomeWork.Api.Migrations
 
             modelBuilder.Entity("HomeWork.api.Models.StaffSalary", b =>
                 {
-                    b.Property<int>("SalaryId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("salary_id");
+
+                    b.Property<DateTime>("BillingTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("salary_billing_time");
 
                     b.Property<float>("Salary")
                         .HasColumnType("float")
                         .HasColumnName("salary_value");
 
-                    b.HasKey("SalaryId");
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int")
+                        .HasColumnName("salary_staff_id");
+
+                    b.HasKey("Id");
 
                     b.ToTable("T_StaffSalary", (string)null);
                 });
@@ -289,15 +305,6 @@ namespace HomeWork.Api.Migrations
                         .HasForeignKey("ManagerId");
                 });
 
-            modelBuilder.Entity("HomeWork.api.Models.Post", b =>
-                {
-                    b.HasOne("HomeWork.api.Models.StaffSalary", null)
-                        .WithMany()
-                        .HasForeignKey("SaralyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("HomeWork.api.Models.Staff", b =>
                 {
                     b.HasOne("HomeWork.api.Models.Department", null)
@@ -307,6 +314,10 @@ namespace HomeWork.Api.Migrations
                     b.HasOne("HomeWork.api.Models.Post", null)
                         .WithMany()
                         .HasForeignKey("PostId");
+
+                    b.HasOne("HomeWork.api.Models.StaffSalary", null)
+                        .WithMany()
+                        .HasForeignKey("SalaryId");
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.StaffChange", b =>

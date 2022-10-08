@@ -79,14 +79,10 @@ namespace HomeWork.Api.Service
             {
                 if (parameter.PageSize == 0) parameter.PageSize = 20;
                 IQueryable<PostDto> postDtosQuery = from pt in db.Posts
-                                                    join sl in db.Salarys
-                                                       on pt.SaralyId equals sl.SalaryId
                                                     select new PostDto()
                                                     {
                                                         Id = pt.Id,
                                                         Name = pt.Name,
-                                                        SaralyId = pt.SaralyId,
-                                                        Saraly = sl.Salary
                                                     };
                 var postDtosQuerySplitedPage = postDtosQuery
                     .AsNoTracking()

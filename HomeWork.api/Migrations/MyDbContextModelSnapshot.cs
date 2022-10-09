@@ -65,11 +65,17 @@ namespace HomeWork.Api.Migrations
 
                     b.Property<int>("FineOrBouns")
                         .HasColumnType("int")
-                        .HasColumnName("attendance_fine_or_bouns");
+                        .HasColumnName("attendance_status_fine_or_bouns");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("attendance_status_is_deleted");
 
                     b.Property<float>("RateFineOrBouns")
                         .HasColumnType("float")
-                        .HasColumnName("attendance_rate_fine_or_bouns");
+                        .HasColumnName("attendance_status_rate_fine_or_bouns");
 
                     b.HasKey("Id");
 
@@ -81,6 +87,7 @@ namespace HomeWork.Api.Migrations
                             Id = 1,
                             EnumType = "迟到",
                             FineOrBouns = 100,
+                            IsDeleted = false,
                             RateFineOrBouns = 10f
                         },
                         new
@@ -88,6 +95,7 @@ namespace HomeWork.Api.Migrations
                             Id = 2,
                             EnumType = "旷工",
                             FineOrBouns = 100,
+                            IsDeleted = false,
                             RateFineOrBouns = 10f
                         },
                         new
@@ -95,6 +103,7 @@ namespace HomeWork.Api.Migrations
                             Id = 3,
                             EnumType = "加班",
                             FineOrBouns = 100,
+                            IsDeleted = false,
                             RateFineOrBouns = 10f
                         },
                         new
@@ -102,6 +111,7 @@ namespace HomeWork.Api.Migrations
                             Id = 4,
                             EnumType = "请假",
                             FineOrBouns = 100,
+                            IsDeleted = false,
                             RateFineOrBouns = 10f
                         });
                 });
@@ -112,6 +122,12 @@ namespace HomeWork.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasColumnName("department_id");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("department_is_deleted");
 
                     b.Property<int?>("ManagerId")
                         .HasColumnType("int")
@@ -141,6 +157,12 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("political_type");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("political_is_deleted");
+
                     b.HasKey("Id");
 
                     b.ToTable("T_Political", (string)null);
@@ -149,12 +171,14 @@ namespace HomeWork.Api.Migrations
                         new
                         {
                             Id = 1,
-                            EnumType = "党员"
+                            EnumType = "党员",
+                            IsDeleted = false
                         },
                         new
                         {
                             Id = 2,
-                            EnumType = "群众"
+                            EnumType = "群众",
+                            IsDeleted = false
                         });
                 });
 
@@ -165,18 +189,70 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("post_id");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("post_is_deleted");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext")
                         .HasColumnName("post_name");
 
-                    b.Property<float>("StandSalary")
-                        .HasColumnType("float")
+                    b.Property<int?>("StandSalaryId")
+                        .HasColumnType("int")
                         .HasColumnName("post_stand_salary");
 
                     b.HasKey("Id");
 
                     b.ToTable("T_Post", (string)null);
+                });
+
+            modelBuilder.Entity("HomeWork.Api.Models.SalaryRecord", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("staff_record_id");
+
+                    b.Property<float>("BasicSalary")
+                        .HasColumnType("float")
+                        .HasColumnName("staff_record_basic_salary");
+
+                    b.Property<float>("Bouns")
+                        .HasColumnType("float")
+                        .HasColumnName("staff_record_bouns");
+
+                    b.Property<DateTime>("CutOfTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("staff_record_cut_off_time");
+
+                    b.Property<float>("Fine")
+                        .HasColumnType("float")
+                        .HasColumnName("staff_record_fine");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("staff_record_is_deleted");
+
+                    b.Property<float>("Salary")
+                        .HasColumnType("float")
+                        .HasColumnName("staff_record_salary");
+
+                    b.Property<int>("StaffId")
+                        .HasColumnType("int")
+                        .HasColumnName("staff_record_staff_id");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("staff_record_start_time");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("T_StaffRecord", (string)null);
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.Staff", b =>
@@ -202,6 +278,12 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("longtext")
                         .HasColumnName("staff_introduce");
 
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit(1)")
+                        .HasDefaultValue(false)
+                        .HasColumnName("staff_is_deleted");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext")
@@ -215,17 +297,15 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("staff_post_id");
 
-                    b.Property<int?>("SalaryId")
-                        .HasColumnType("int")
-                        .HasColumnName("staff_salary_id");
+                    b.Property<float?>("Salary")
+                        .HasColumnType("float")
+                        .HasColumnName("staff_salary");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("SalaryId");
 
                     b.ToTable("T_Staff", (string)null);
                 });
@@ -235,24 +315,28 @@ namespace HomeWork.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("staffchange_id");
+                        .HasColumnName("staff_change_id");
 
                     b.Property<DateTime>("ChangeTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
-                        .HasColumnName("staffchange_change_time");
+                        .HasColumnName("staff_change_change_time");
 
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int")
-                        .HasColumnName("staffchange_department_id");
+                        .HasColumnName("staff_change_department_id");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int")
+                        .HasColumnName("staff_change_post_id");
 
                     b.Property<int>("StaffId")
                         .HasColumnType("int")
-                        .HasColumnName("staffchange_staff_id");
+                        .HasColumnName("staff_change_staff_id");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DepartmentId");
+                    b.HasIndex("PostId");
 
                     b.HasIndex("StaffId");
 
@@ -266,17 +350,12 @@ namespace HomeWork.Api.Migrations
                         .HasColumnType("int")
                         .HasColumnName("salary_id");
 
-                    b.Property<DateTime>("BillingTime")
-                        .HasColumnType("datetime(6)")
-                        .HasColumnName("salary_billing_time");
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit(1)");
 
                     b.Property<float>("Salary")
                         .HasColumnType("float")
                         .HasColumnName("salary_value");
-
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int")
-                        .HasColumnName("salary_staff_id");
 
                     b.HasKey("Id");
 
@@ -314,17 +393,13 @@ namespace HomeWork.Api.Migrations
                     b.HasOne("HomeWork.api.Models.Post", null)
                         .WithMany()
                         .HasForeignKey("PostId");
-
-                    b.HasOne("HomeWork.api.Models.StaffSalary", null)
-                        .WithMany()
-                        .HasForeignKey("SalaryId");
                 });
 
             modelBuilder.Entity("HomeWork.api.Models.StaffChange", b =>
                 {
                     b.HasOne("HomeWork.api.Models.Department", null)
                         .WithMany()
-                        .HasForeignKey("DepartmentId")
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

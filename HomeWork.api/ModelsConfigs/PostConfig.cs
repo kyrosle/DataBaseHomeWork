@@ -11,7 +11,8 @@ namespace HomeWork.api.ModelsConfigs
             builder.ToTable("T_Post");
             builder.Property(pt => pt.Id).HasColumnName("post_id");
             builder.Property(pt => pt.Name).HasColumnName("post_name");
-            builder.Property(pt => pt.StandSalary).HasColumnName("post_stand_salary");
+            builder.Property(pt => pt.StandSalaryId).HasColumnName("post_stand_salary");
+            builder.Property(pt => pt.IsDeleted).HasColumnName("post_is_deleted").HasDefaultValue(false);
         }
     }
 }

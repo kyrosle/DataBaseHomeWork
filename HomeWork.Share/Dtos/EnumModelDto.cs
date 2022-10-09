@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HomeWork.api.Models
+﻿namespace HomeWork.Share.Dtos
 {
-    public class EnumModel
+    public class EnumModelDto
     {
         public int Id { get; set; }
         public string EnumType { get; set; }

@@ -19,10 +19,11 @@ namespace HomeWork.Api.Migrations
                 {
                     attandance_status_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    attendance_fine_or_bouns = table.Column<int>(type: "int", nullable: false),
-                    attendance_rate_fine_or_bouns = table.Column<float>(type: "float", nullable: false),
+                    attendance_status_fine_or_bouns = table.Column<int>(type: "int", nullable: false),
+                    attendance_status_rate_fine_or_bouns = table.Column<float>(type: "float", nullable: false),
                     attandance_status_type = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    attendance_status_is_deleted = table.Column<bool>(type: "bit(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +38,8 @@ namespace HomeWork.Api.Migrations
                     political_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     political_type = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    political_is_deleted = table.Column<bool>(type: "bit(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -51,13 +53,35 @@ namespace HomeWork.Api.Migrations
                 {
                     post_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    post_stand_salary = table.Column<float>(type: "float", nullable: false),
+                    post_stand_salary = table.Column<int>(type: "int", nullable: true),
                     post_name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    post_is_deleted = table.Column<bool>(type: "bit(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_T_Post", x => x.post_id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "T_StaffRecord",
+                columns: table => new
+                {
+                    staff_record_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    staff_record_staff_id = table.Column<int>(type: "int", nullable: false),
+                    staff_record_salary = table.Column<float>(type: "float", nullable: false),
+                    staff_record_basic_salary = table.Column<float>(type: "float", nullable: false),
+                    staff_record_bouns = table.Column<float>(type: "float", nullable: false),
+                    staff_record_fine = table.Column<float>(type: "float", nullable: false),
+                    staff_record_start_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    staff_record_cut_off_time = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    staff_record_is_deleted = table.Column<bool>(type: "bit(1)", nullable: false, defaultValue: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_T_StaffRecord", x => x.staff_record_id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -67,9 +91,8 @@ namespace HomeWork.Api.Migrations
                 {
                     salary_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    salary_staff_id = table.Column<int>(type: "int", nullable: false),
                     salary_value = table.Column<float>(type: "float", nullable: false),
-                    salary_billing_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit(1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,7 +131,8 @@ namespace HomeWork.Api.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     department_manager_id = table.Column<int>(type: "int", nullable: true),
                     department_name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    department_is_deleted = table.Column<bool>(type: "bit(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -128,11 +152,12 @@ namespace HomeWork.Api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     staff_post_id = table.Column<int>(type: "int", nullable: true),
                     staff_department_id = table.Column<int>(type: "int", nullable: true),
-                    staff_salary_id = table.Column<int>(type: "int", nullable: true),
+                    staff_salary = table.Column<float>(type: "float", nullable: true),
                     staff_introduce = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     staff_name = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    staff_is_deleted = table.Column<bool>(type: "bit(1)", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -147,11 +172,6 @@ namespace HomeWork.Api.Migrations
                         column: x => x.staff_post_id,
                         principalTable: "T_Post",
                         principalColumn: "post_id");
-                    table.ForeignKey(
-                        name: "FK_T_Staff_T_StaffSalary_staff_salary_id",
-                        column: x => x.staff_salary_id,
-                        principalTable: "T_StaffSalary",
-                        principalColumn: "salary_id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -159,25 +179,26 @@ namespace HomeWork.Api.Migrations
                 name: "T_StaffChange",
                 columns: table => new
                 {
-                    staffchange_id = table.Column<int>(type: "int", nullable: false)
+                    staff_change_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    staffchange_staff_id = table.Column<int>(type: "int", nullable: false),
-                    staffchange_department_id = table.Column<int>(type: "int", nullable: false),
-                    staffchange_change_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                    staff_change_staff_id = table.Column<int>(type: "int", nullable: false),
+                    staff_change_post_id = table.Column<int>(type: "int", nullable: false),
+                    staff_change_department_id = table.Column<int>(type: "int", nullable: false),
+                    staff_change_change_time = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_T_StaffChange", x => x.staffchange_id);
+                    table.PrimaryKey("PK_T_StaffChange", x => x.staff_change_id);
                     table.ForeignKey(
-                        name: "FK_T_StaffChange_T_Department_staffchange_department_id",
-                        column: x => x.staffchange_department_id,
+                        name: "FK_T_StaffChange_T_Department_staff_change_post_id",
+                        column: x => x.staff_change_post_id,
                         principalTable: "T_Department",
                         principalColumn: "department_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_T_StaffChange_T_Staff_staffchange_staff_id",
-                        column: x => x.staffchange_staff_id,
+                        name: "FK_T_StaffChange_T_Staff_staff_change_staff_id",
+                        column: x => x.staff_change_staff_id,
                         principalTable: "T_Staff",
                         principalColumn: "staff_id",
                         onDelete: ReferentialAction.Cascade);
@@ -186,7 +207,7 @@ namespace HomeWork.Api.Migrations
 
             migrationBuilder.InsertData(
                 table: "T_AttendanceStatus",
-                columns: new[] { "attandance_status_id", "attandance_status_type", "attendance_fine_or_bouns", "attendance_rate_fine_or_bouns" },
+                columns: new[] { "attandance_status_id", "attandance_status_type", "attendance_status_fine_or_bouns", "attendance_status_rate_fine_or_bouns" },
                 values: new object[,]
                 {
                     { 1, "迟到", 100, 10f },
@@ -230,19 +251,14 @@ namespace HomeWork.Api.Migrations
                 column: "staff_post_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_Staff_staff_salary_id",
-                table: "T_Staff",
-                column: "staff_salary_id");
+                name: "IX_T_StaffChange_staff_change_post_id",
+                table: "T_StaffChange",
+                column: "staff_change_post_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_T_StaffChange_staffchange_department_id",
+                name: "IX_T_StaffChange_staff_change_staff_id",
                 table: "T_StaffChange",
-                column: "staffchange_department_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_T_StaffChange_staffchange_staff_id",
-                table: "T_StaffChange",
-                column: "staffchange_staff_id");
+                column: "staff_change_staff_id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_T_Attendance_T_Staff_attendance_staff_id",
@@ -276,6 +292,12 @@ namespace HomeWork.Api.Migrations
                 name: "T_StaffChange");
 
             migrationBuilder.DropTable(
+                name: "T_StaffRecord");
+
+            migrationBuilder.DropTable(
+                name: "T_StaffSalary");
+
+            migrationBuilder.DropTable(
                 name: "T_AttendanceStatus");
 
             migrationBuilder.DropTable(
@@ -286,9 +308,6 @@ namespace HomeWork.Api.Migrations
 
             migrationBuilder.DropTable(
                 name: "T_Post");
-
-            migrationBuilder.DropTable(
-                name: "T_StaffSalary");
         }
     }
 }

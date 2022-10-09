@@ -58,8 +58,8 @@ namespace HomeWork.api.Controllers
             var attendanceType = db.AttendanceStatuses.Where(e => true).ToArray();
 
             // add two Post
-            var post1 = new Post { Name = "Post1", StandSalary = 10000 };
-            var post2 = new Post { Name = "Post2", StandSalary = 20000 };
+            var post1 = new Post { Name = "Post1" };
+            var post2 = new Post { Name = "Post2" };
 
             // add two department
             var department1 = new Department { Name = "Department1" };
@@ -93,8 +93,8 @@ namespace HomeWork.api.Controllers
             await db.SaveChangesAsync();
 
             // add two Manager staff salary
-            var saraly1 = new StaffSalary { Salary = 10000, StaffId = manager1.Id };
-            var saraly2 = new StaffSalary { Salary = 20000, StaffId = manager2.Id };
+            var saraly1 = new StaffSalary { Salary = 10000 };
+            var saraly2 = new StaffSalary { Salary = 20000 };
             await db.Salarys.AddRangeAsync(saraly1, saraly2);
             await db.SaveChangesAsync();
 
@@ -127,8 +127,8 @@ namespace HomeWork.api.Controllers
             await db.SaveChangesAsync();
 
             // add two Staff staff salary
-            var saraly3 = new StaffSalary { Salary = 10000, StaffId = staff1.Id };
-            var saraly4 = new StaffSalary { Salary = 20000, StaffId = staff2.Id };
+            var saraly3 = new StaffSalary { Salary = 10000 };
+            var saraly4 = new StaffSalary { Salary = 20000 };
             await db.Salarys.AddRangeAsync(saraly3, saraly4);
             await db.SaveChangesAsync();
 
@@ -152,13 +152,13 @@ namespace HomeWork.api.Controllers
             var staffs = from staff in db.Staffs
                          join post in db.Posts on staff.PostId equals post.Id
                          join department in db.Departments on staff.DepartmentId equals department.Id
-                         join salary in db.Salarys on staff.SalaryId equals salary.Id
+                         //join salary in db.Salarys on staff.SalaryId equals salary.Id
                          select new
                          {
                              StaffName = staff.Name,
                              PostName = post.Name,
                              DepartmentName = department.Name,
-                             salary.Salary
+                             //salary.Salary
                          };
             return new ApiResponse(true, staffs);
         }

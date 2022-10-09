@@ -4,6 +4,6 @@
     {
         // 岗位 Id
         // 岗位 名称
-        public float StandSalary { get; set; }
+        public int? StandSalaryId { get; set; }
     }
 }

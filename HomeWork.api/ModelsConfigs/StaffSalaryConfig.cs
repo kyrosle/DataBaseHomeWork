@@ -10,10 +10,7 @@ namespace HomeWork.api.ModelsConfigs
         {
             builder.ToTable("T_StaffSalary");
             builder.Property(e => e.Id).HasColumnName("salary_id");
-            builder.Property(e => e.StaffId).HasColumnName("salary_staff_id");
             builder.Property(e => e.Salary).HasColumnName("salary_value");
-
-            builder.Property(e => e.Salary).HasColumnType("decimal(20,6)");
         }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HomeWork.Api.Controllers
 {
     [ApiController]
-    [Route("ap/[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class PostController : ControllerBase
     {
         private readonly IPostService service;

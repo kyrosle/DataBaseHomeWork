@@ -2,6 +2,16 @@
 {
     public class StaffChangeDto
     {
+        public StaffChangeDto() { }
+        public StaffChangeDto(int id, string staffName, string postName, string departmentName, DateTime changeTime)
+        {
+            Id = id;
+            StaffName = staffName;
+            PostName = postName;
+            DepartmentName = departmentName;
+            ChangeTime = changeTime;
+        }
+
         public int Id { get; set; }
         public int StaffId { get; set; }
         public string StaffName { get; set; }

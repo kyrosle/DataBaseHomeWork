@@ -57,9 +57,15 @@ namespace HomeWork.api.Controllers
             var politicalType = db.Politicals.Where(e => true).ToArray();
             var attendanceType = db.AttendanceStatuses.Where(e => true).ToArray();
 
+            // add two Manager staff salary
+            var saraly1 = new StaffSalary { Salary = 10000 };
+            var saraly2 = new StaffSalary { Salary = 20000 };
+            await db.Salarys.AddRangeAsync(saraly1, saraly2);
+            await db.SaveChangesAsync();
+
             // add two Post
-            var post1 = new Post { Name = "Post1" };
-            var post2 = new Post { Name = "Post2" };
+            var post1 = new Post { Name = "Post1", StandSalaryId = saraly1.Id };
+            var post2 = new Post { Name = "Post2", StandSalaryId = saraly2.Id };
 
             // add two department
             var department1 = new Department { Name = "Department1" };
@@ -92,11 +98,6 @@ namespace HomeWork.api.Controllers
             await db.Staffs.AddRangeAsync(manager1, manager2);
             await db.SaveChangesAsync();
 
-            // add two Manager staff salary
-            var saraly1 = new StaffSalary { Salary = 10000 };
-            var saraly2 = new StaffSalary { Salary = 20000 };
-            await db.Salarys.AddRangeAsync(saraly1, saraly2);
-            await db.SaveChangesAsync();
 
             // change department manager
             department1.ManagerId = manager1.Id;

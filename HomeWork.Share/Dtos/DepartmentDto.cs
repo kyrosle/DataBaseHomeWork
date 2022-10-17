@@ -1,8 +1,18 @@
 ﻿namespace HomeWork.Share.Dtos
 {
-    public class DepartmentDto : IdentityDto
+    public class DepartmentDto
     {
-        public int ManagerId { get; set; }
-        public string ManagerName { get; set; }
+        public DepartmentDto() { }
+        public DepartmentDto(int id, string name, string managerName)
+        {
+            Id = id;
+            Name = name;
+            ManagerName = managerName;
+        }
+
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int? ManagerId { get; set; }
+        public string? ManagerName { get; set; }
     }
 }

@@ -4,8 +4,9 @@ using HomeWork.Share.Dtos;
 using HomeWork.Share.Parmeters;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using System.Runtime.Intrinsics.Arm;
 
-namespace HomeWork.Api.Service
+namespace HomeWork.Api.Service.ControllerService
 {
     public class DepartmentService : IDepartmentService
     {
@@ -31,11 +32,15 @@ namespace HomeWork.Api.Service
                 {
                     return new ApiResponse("Department is Existed");
                 }
-
+                if (model.ManagerId == 0)
+                {
+                    model.ManagerId = null;
+                    model.ManagerName = null;
+                }
                 var department = mapper.Map<Department>(model);
                 await db.Departments.AddAsync(department);
                 await db.SaveChangesAsync();
-                return new ApiResponse(true, "Department Added");
+                return new ApiResponse(true, mapper.Map<DepartmentDto>(department));
             }
             catch (Exception e)
             {
@@ -73,15 +78,13 @@ namespace HomeWork.Api.Service
             try
             {
                 if (parameter.PageSize == 0) parameter.PageSize = 20;
-                IQueryable<DepartmentDto> departmentDtosQuery = from dp in db.Departments
-                                                                join st in db.Staffs on dp.ManagerId equals st.Id
-                                                                select new DepartmentDto()
-                                                                {
-                                                                    Id = dp.Id,
-                                                                    Name = dp.Name,
-                                                                    ManagerId = st.Id,
-                                                                    ManagerName = st.Name
-                                                                };
+                IQueryable<DepartmentDto> departmentDtosQuery =
+                    from dp in db.Departments
+                    join st in db.Staffs on dp.ManagerId equals st.Id
+                        into st_t
+                    from st in st_t.DefaultIfEmpty()
+                    select new DepartmentDto(dp.Id, dp.Name, st.Name);
+                //select new DepartmentDto(dp.Id, dp.Name, "HH");
                 var departmentDtosSplitedPage = departmentDtosQuery
                     .Skip(parameter.PageIndex * parameter.PageSize)
                     .Take(parameter.PageSize)
@@ -104,8 +107,15 @@ namespace HomeWork.Api.Service
         {
             try
             {
-                var department = await db.Posts.SingleAsync(dp => dp.Id.Equals(id));
-                var departmentDto = mapper.Map<DepartmentDto>(department);
+                var departmentQuery =
+                    from dp in db.Departments
+                    join st in db.Staffs
+                        on dp.ManagerId equals st.Id
+                        into st_t
+                    from st in st_t.DefaultIfEmpty()
+                    where dp.Id == id
+                    select new DepartmentDto(dp.Id, dp.Name, st.Name);
+                var departmentDto = await departmentQuery.AsNoTracking().SingleAsync();
                 return new ApiResponse(true, departmentDto);
             }
             catch (Exception e)

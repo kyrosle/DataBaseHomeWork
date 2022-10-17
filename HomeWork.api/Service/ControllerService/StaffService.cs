@@ -6,7 +6,7 @@ using Mapster;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomeWork.Api.Service
+namespace HomeWork.Api.Service.ControllerService
 {
     public class StaffService : IStaffServiece
     {
@@ -38,7 +38,8 @@ namespace HomeWork.Api.Service
                 // add staff to ef db
                 await db.Staffs.AddAsync(staff);
                 await db.SaveChangesAsync();
-                return new ApiResponse(true, "Staff Added");
+                // return the added staff model
+                return new ApiResponse(true, mapper.Map<StaffDto>(staff));
             }
             catch (Exception e)
             {
@@ -57,7 +58,10 @@ namespace HomeWork.Api.Service
                 // select single staff model
                 var staff = await db.Staffs.SingleAsync(st => st.Id.Equals(id));
                 // if not staff id is matched the param-id then will throw a expection nothing in seq
+                // then remove the seleted staff
                 db.Staffs.Remove(staff);
+                // get upload the operation 
+                // if it successed will return the numbers model been deleted or will return zero as failed 
                 var result = await db.SaveChangesAsync();
                 return new ApiResponse(true, $"Delete {result} Records");
             }
@@ -69,40 +73,35 @@ namespace HomeWork.Api.Service
         /// <summary>
         /// 获取所有Staff
         /// </summary>
-        /// <param name="parameter"></param>
+        /// <param name="parameter">queryed param from url</param>
         /// <returns></returns>
         public async Task<ApiResponse> GetAllAsync(QueryParameter parameter)
         {
             try
             {
+                // if the param-PageSize is empty, set the default size as 20
                 if (parameter.PageSize == 0) parameter.PageSize = 20;
-                //IQueryable<Staff> staffsQuery = db.Staffs
-                //    .Skip(parameter.PageIndex * parameter.PageSize)
-                //    .Take(parameter.PageSize)
-                //    .Where(st => string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search));
-                IQueryable<StaffDto> staffDtosQuery = from st in db.Staffs
-                                                      join dp in db.Departments
-                                                        on st.DepartmentId equals dp.Id
-                                                      join pt in db.Posts
-                                                        on st.PostId equals pt.Id
-                                                      join pol in db.Politicals
-                                                        on st.PoliticalType equals pol.Id
-                                                      select new StaffDto()
-                                                      {
-                                                          Id = st.Id,
-                                                          Name = st.Name,
-                                                          Brith = st.Brith,
-                                                          PoliticalType = pol.EnumType,
-                                                          DepartmentId = st.DepartmentId,
-                                                          DepartmentName = dp.Name,
-                                                          PostId = st.PostId,
-                                                          PostName = pt.Name,
-                                                      };
+                // make up the query which could selet all staffs in a page which size is 20
+                // if less than 20 it's also run success
+                IQueryable<StaffDto> staffDtosQuery =
+                    from st in db.Staffs
+                    join dp in db.Departments
+                      on st.DepartmentId equals dp.Id
+                    into dp_t
+                    from dp in dp_t.DefaultIfEmpty()
+                    join pt in db.Posts
+                      on st.PostId equals pt.Id
+                      into pt_t
+                    from pt in pt_t.DefaultIfEmpty()
+                    join pol in db.Politicals
+                      on st.PoliticalType equals pol.Id
+                    select new StaffDto(st.Id, st.Name, st.Brith, pol.EnumType, st.Health, pt.Name, dp.Name, st.Salary, st.Introduce);
                 var staffDtosSplitedPage = staffDtosQuery
                     .AsNoTracking()
                     .Where(st => string.IsNullOrWhiteSpace(parameter.Search) || st.Name.Contains(parameter.Search))
                     .Skip(parameter.PageIndex * parameter.PageSize).Take(parameter.PageSize);
-                var staffDtos = await staffDtosSplitedPage.ToArrayAsync();
+                var staffDtos =
+                    await staffDtosSplitedPage.ToArrayAsync();
                 // need contain post or department infomation
                 //var staffs = staffModels.Select(stm => mapper.Map<StaffDto>(stm)).ToArray();
                 return new ApiResponse(true, staffDtos);
@@ -121,9 +120,21 @@ namespace HomeWork.Api.Service
         {
             try
             {
-                var staff = await db.Staffs.SingleAsync(st => st.Id.Equals(id));
-                // staff 为空 throw Expection
-                var staffDto = mapper.Map<StaffDto>(staff);
+                var staffQuery =
+                    from st in db.Staffs
+                    join dp in db.Departments
+                        on st.DepartmentId equals dp.Id
+                        into dp_t
+                    from dp in dp_t.DefaultIfEmpty()
+                    join pt in db.Posts on st.PostId equals pt.Id
+                        into pt_t
+                    from pt in pt_t.DefaultIfEmpty()
+                    join ss in db.Salarys on pt.StandSalaryId equals ss.Id
+                    join pol in db.Politicals
+                        on st.PoliticalType equals pol.Id
+                    where st.Id == id
+                    select new StaffDto(st.Id, st.Name, st.Brith, pol.EnumType, st.Health, pt.Name, dp.Name, st.Salary + ss.Salary, st.Introduce);
+                var staffDto = await staffQuery.AsNoTracking().SingleAsync();
                 return new ApiResponse(true, staffDto);
             }
             catch (Exception e)

@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace HomeWork.Share.Dtos
 {
-    internal class SalaryRecordDto
+    public class SalaryRecordDto
     {
+        public SalaryRecordDto() { }
+        public SalaryRecordDto(int id, string staffName, float basicSalary, float bouns, float fine, DateTime startTime, DateTime cutOfTime)
+        {
+            Id = id;
+            StaffName = staffName;
+            BasicSalary = basicSalary;
+            Bouns = bouns;
+            Fine = fine;
+            StartTime = startTime;
+            CutOfTime = cutOfTime;
+        }
+
         public int Id { get; set; }
         public int StaffId { get; set; }
         public string StaffName { get; set; }

@@ -12,15 +12,17 @@ namespace HomeWork.Api.Extensions
                 .Map(st => st.Id, std => std.Id)
                 .Map(st => st.Name, std => std.Name)
                 .Map(st => st.Brith, std => std.Brith)
-                .Map(st => st.DepartmentId, sdt => sdt.DepartmentId)
+                .Map(st => st.PoliticalType, std => std.PoliticalTypeId)
+                .Map(st => st.DepartmentId, std => std.DepartmentId)
+                .Map(st => st.Health, std => std.Health)
                 .Map(st => st.PostId, sdt => sdt.PostId)
                 .Map(st => st.Introduce, std => std.Introduce)
-                .Map(st => st.PoliticalType, std => std.PoliticalTypeId)
                 .Map(st => st.Salary, std => std.Salary);
 
             config.NewConfig<PostDto, Post>()
                 .Map(pt => pt.Id, ptd => ptd.Id)
-                .Map(pt => pt.Name, ptd => ptd.Name);
+                .Map(pt => pt.Name, ptd => ptd.Name)
+                .Map(pt => pt.StandSalaryId, ptd => ptd.StandSalaryId);
 
             config.NewConfig<DepartmentDto, Department>()
                 .Map(dp => dp.Id, dpd => dpd.Id)
@@ -37,6 +39,7 @@ namespace HomeWork.Api.Extensions
             config.NewConfig<StaffChangeDto, StaffChange>()
                 .Map(stc => stc.Id, stcd => stcd.Id)
                 .Map(stc => stc.StaffId, stcd => stcd.StaffId)
+                .Map(stc => stc.PostId, stcd => stcd.PostId)
                 .Map(stc => stc.DepartmentId, stcd => stcd.DepartmentId)
                 .Map(stc => stc.ChangeTime, stcd => stcd.ChangeTime);
         }

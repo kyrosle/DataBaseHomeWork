@@ -5,7 +5,7 @@ using HomeWork.Share.Parmeters;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
-namespace HomeWork.Api.Service
+namespace HomeWork.Api.Service.ControllerService
 {
     public class PostService : IPostService
     {
@@ -35,7 +35,7 @@ namespace HomeWork.Api.Service
                 var post = mapper.Map<Post>(model);
                 await db.Posts.AddAsync(post);
                 await db.SaveChangesAsync();
-                return new ApiResponse(true, "Post Added");
+                return new ApiResponse(true, mapper.Map<PostDto>(post));
             }
             catch (Exception e)
             {
@@ -52,16 +52,9 @@ namespace HomeWork.Api.Service
             try
             {
                 var post = await db.Posts.SingleAsync(pt => pt.Id.Equals(id));
-                if (post is null)
-                {
-                    return new ApiResponse("Id not Found");
-                }
-                else
-                {
-                    db.Posts.Remove(post);
-                    var result = await db.SaveChangesAsync();
-                    return new ApiResponse(true, $"Delete {result} Records");
-                }
+                db.Posts.Remove(post);
+                var result = await db.SaveChangesAsync();
+                return new ApiResponse(true, $"Delete {result} Records");
             }
             catch (Exception e)
             {
@@ -78,12 +71,11 @@ namespace HomeWork.Api.Service
             try
             {
                 if (parameter.PageSize == 0) parameter.PageSize = 20;
-                IQueryable<PostDto> postDtosQuery = from pt in db.Posts
-                                                    select new PostDto()
-                                                    {
-                                                        Id = pt.Id,
-                                                        Name = pt.Name,
-                                                    };
+                IQueryable<PostDto> postDtosQuery =
+                    from pt in db.Posts
+                    join ss in db.Salarys
+                        on pt.StandSalaryId equals ss.Id
+                    select new PostDto(pt.Id, pt.Name, ss.Salary);
                 var postDtosQuerySplitedPage = postDtosQuery
                     .AsNoTracking()
                     .Where(pt => string.IsNullOrWhiteSpace(parameter.Search) || pt.Name.Trim().Contains(parameter.Search))
@@ -106,8 +98,13 @@ namespace HomeWork.Api.Service
         {
             try
             {
-                var post = await db.Posts.SingleAsync(pt => pt.Id.Equals(id));
-                var postDto = mapper.Map<PostDto>(post);
+                var postQuery =
+                    from pt in db.Posts
+                    join ss in db.Salarys
+                        on pt.StandSalaryId equals ss.Id
+                    where pt.Id == id
+                    select new PostDto(pt.Id, pt.Name, ss.Salary);
+                var postDto = await postQuery.AsNoTracking().SingleAsync();
                 return new ApiResponse(true, postDto);
             }
             catch (Exception e)
